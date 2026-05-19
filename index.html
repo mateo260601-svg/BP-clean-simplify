@@ -4,115 +4,290 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BP Investment Banking Suite</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
-body{background:#0F172A;overflow:hidden;color:white}
-#bg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
-.center{position:relative;z-index:10;width:100%;height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
-.card{width:100%;max-width:620px;background:rgba(15,23,42,.92);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:40px;backdrop-filter:blur(12px);box-shadow:0 20px 60px rgba(0,0,0,.45)}
-.logo{font-size:34px;font-weight:800;margin-bottom:8px}
-.sub{color:#94A3B8;margin-bottom:30px;line-height:1.5}
-input{width:100%;padding:18px;border-radius:14px;border:none;outline:none;font-size:17px;margin-bottom:18px;background:white;color:#0F172A}
-button{width:100%;border:none;cursor:pointer;border-radius:14px;padding:16px;font-weight:700;font-size:16px;transition:.2s}
-button:hover{transform:translateY(-1px)}
-.primary{background:white;color:#0F172A}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.secondary{background:#1E293B;color:white}
-.footer{margin-top:26px;color:#64748B;font-size:13px;text-align:center}
-.status{margin-top:18px;color:#22C55E;font-size:14px}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,sans-serif;
+}
+
+body{
+background:#020617;
+overflow:hidden;
+color:white;
+}
+
+#bg{
+position:fixed;
+inset:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:0;
+}
+
+.center{
+position:relative;
+z-index:10;
+width:100%;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.card{
+width:100%;
+max-width:680px;
+background:rgba(2,6,23,.92);
+border:1px solid rgba(255,255,255,.06);
+border-radius:28px;
+padding:42px;
+backdrop-filter:blur(16px);
+box-shadow:0 20px 80px rgba(0,0,0,.55);
+}
+
+.logo{
+font-size:58px;
+font-weight:900;
+line-height:1;
+margin-bottom:18px;
+}
+
+.sub{
+color:#94A3B8;
+line-height:1.6;
+font-size:20px;
+margin-bottom:34px;
+}
+
+input{
+width:100%;
+padding:20px;
+border-radius:16px;
+border:none;
+outline:none;
+background:white;
+color:#0F172A;
+font-size:20px;
+font-weight:600;
+margin-bottom:18px;
+}
+
+button{
+width:100%;
+padding:18px;
+border:none;
+border-radius:16px;
+cursor:pointer;
+font-size:18px;
+font-weight:800;
+transition:.2s;
+}
+
+button:hover{
+transform:translateY(-1px);
+}
+
+.primary{
+background:white;
+color:#0F172A;
+margin-bottom:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.secondary{
+background:#172036;
+color:white;
+}
+
+.status{
+margin-top:22px;
+font-size:16px;
+color:#22C55E;
+min-height:24px;
+}
+
+.footer{
+margin-top:26px;
+text-align:center;
+color:#64748B;
+font-size:14px;
+}
 </style>
 </head>
+
 <body>
+
 <canvas id="bg"></canvas>
+
 <div class="center">
+
 <div class="card">
-<div class="logo">BP Investment Banking Suite</div>
+
+<div class="logo">
+BP Investment Banking Suite
+</div>
+
 <div class="sub">
 AI-powered platform for Investment Memorandum generation,
 financial extraction, QoE analysis, restructuring workflows,
 investor reporting and elite M&A deliverables.
 </div>
 
-<input id="licenseInput" type="text" placeholder="ENTER LICENSE KEY" autocomplete="off">
+<input
+id="licenseInput"
+type="text"
+placeholder="ENTER LICENSE KEY"
+autocomplete="off"
+>
 
 <button class="primary" id="accessBtn">
 Access Platform
 </button>
 
 <div class="grid">
-<button class="secondary" id="excelBtn">Generate Excel</button>
-<button class="secondary" id="deckBtn">Generate IM Deck</button>
-<button class="secondary" id="uploadBtn">Upload Financials</button>
-<button class="secondary" id="qoeBtn">Generate QoE</button>
+
+<button class="secondary" id="excelBtn">
+Generate Excel
+</button>
+
+<button class="secondary" id="deckBtn">
+Generate IM Deck
+</button>
+
+<button class="secondary" id="uploadBtn">
+Upload Financials
+</button>
+
+<button class="secondary" id="qoeBtn">
+Generate QoE
+</button>
+
 </div>
 
-<div class="status" id="status">System ready</div>
+<div class="status" id="status">
+System ready
+</div>
 
 <div class="footer">
 MG Advisory • Investment Banking Technology
 </div>
+
 </div>
+
 </div>
 
 <script>
+
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
+
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
 const particles=[];
-for(let i=0;i<100;i++){
+
+for(let i=0;i<120;i++){
 particles.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
 r:Math.random()*2,
-dx:(Math.random()-.5)*0.5,
-dy:(Math.random()-.5)*0.5
+dx:(Math.random()-.5)*0.35,
+dy:(Math.random()-.5)*0.35
 });
 }
 
 function animate(){
+
 ctx.clearRect(0,0,canvas.width,canvas.height);
-ctx.fillStyle="rgba(255,255,255,.5)";
+
+ctx.fillStyle="rgba(255,255,255,.55)";
+
 particles.forEach(p=>{
+
 ctx.beginPath();
 ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
 ctx.fill();
+
 p.x+=p.dx;
 p.y+=p.dy;
+
 if(p.x<0||p.x>canvas.width) p.dx*=-1;
 if(p.y<0||p.y>canvas.height) p.dy*=-1;
+
 });
+
 requestAnimationFrame(animate);
+
 }
+
 animate();
 
 const input=document.getElementById("licenseInput");
-setTimeout(()=>{input.focus();},300);
+
+setTimeout(()=>{
+input.focus();
+},300);
 
 input.addEventListener("input",e=>{
 e.target.value=e.target.value.toUpperCase();
 });
 
 document.getElementById("accessBtn").addEventListener("click",()=>{
-document.getElementById("status").innerText="Platform access granted";
+
+const key=input.value.trim();
+
+if(
+key==="JRC-MATEO-2025" ||
+key==="MG-ACCESS-2025" ||
+key==="BP-ELITE-2025"
+){
+
+document.getElementById("status").innerText="Access granted";
+
+setTimeout(()=>{
+window.location.href="/app";
+},700);
+
+}else{
+
+document.getElementById("status").style.color="#EF4444";
+document.getElementById("status").innerText="Invalid license key";
+
+}
+
 });
 
 document.getElementById("excelBtn").addEventListener("click",()=>{
-document.getElementById("status").innerText="Excel generation started";
+document.getElementById("status").style.color="#22C55E";
+document.getElementById("status").innerText="Excel generation module ready";
 });
 
 document.getElementById("deckBtn").addEventListener("click",()=>{
-document.getElementById("status").innerText="IM Deck generation started";
+document.getElementById("status").style.color="#22C55E";
+document.getElementById("status").innerText="IM deck generation module ready";
 });
 
 document.getElementById("uploadBtn").addEventListener("click",()=>{
-document.getElementById("status").innerText="Upload module ready";
+document.getElementById("status").style.color="#22C55E";
+document.getElementById("status").innerText="Financial upload module ready";
 });
 
 document.getElementById("qoeBtn").addEventListener("click",()=>{
-document.getElementById("status").innerText="QoE analysis started";
+document.getElementById("status").style.color="#22C55E";
+document.getElementById("status").innerText="QoE analysis module ready";
 });
+
 </script>
+
 </body>
 </html>
