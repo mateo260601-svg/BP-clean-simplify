@@ -261,6 +261,11 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .ht td{padding:8px 12px;border-bottom:1px solid #F8FAFC;color:#374151;text-align:right;font-family:var(--mono);font-size:11px}
 .ht td:first-child{text-align:left;font-family:var(--font);font-weight:500;color:#1E293B}
 .ht tr:hover td{background:#F8FAFC}
+
+/* Login input hardening: keeps the license field writable above all animated layers */
+#s-login .lc{position:relative;z-index:150;pointer-events:auto}
+#s-login .lc-input{position:relative;z-index:200;pointer-events:auto!important;user-select:text!important;-webkit-user-select:text!important;background:#fff!important;color:#0F172A!important;caret-color:#0F172A!important}
+#s-login .lc-input:disabled,#s-login .lc-input[readonly]{opacity:1}
 </style>
 </head>
 <body>
@@ -411,7 +416,12 @@ const STEPS=[
 
 /* ── AUTH ── */
 document.getElementById("lb").onclick=doLogin;
-document.getElementById("li").onkeydown=e=>e.key==="Enter"&&doLogin();
+const licenseInput=document.getElementById("li");
+licenseInput.disabled=false;
+licenseInput.readOnly=false;
+licenseInput.onkeydown=e=>e.key==="Enter"&&doLogin();
+licenseInput.oninput=e=>{ e.target.value=e.target.value.toUpperCase(); };
+setTimeout(()=>licenseInput.focus(),250);
 async function doLogin(){
   const key=document.getElementById("li").value.trim();
   const btn=document.getElementById("lb"),err=document.getElementById("le");
