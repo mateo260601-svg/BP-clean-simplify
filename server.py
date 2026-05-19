@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-app = FastAPI(title="BP Generator - MG Advisory", version="4.1")
+app = FastAPI(title="BP Generator - MG Advisory", version="5.0 Investment Banking Suite")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 VALID_LICENSES = {
@@ -19,7 +19,9 @@ VALID_LICENSES = {
 
 BASE_DIR    = Path(__file__).parent.resolve()
 OUTPUTS_DIR = BASE_DIR / "outputs"
+DECKS_DIR = BASE_DIR / "decks"
 OUTPUTS_DIR.mkdir(exist_ok=True)
+DECKS_DIR.mkdir(exist_ok=True)
 INDEX       = BASE_DIR / "index.html"
 
 def _check_license(key):
@@ -134,7 +136,7 @@ class GenerateRequest(BaseModel):
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "version": "4.1"}
+    return {"status": "ok", "version": "5.0", "suite": "Investment Banking"}
 
 @app.post("/api/auth/login")
 def login(req: LoginRequest):
@@ -177,6 +179,11 @@ async def import_financials(file: UploadFile = File(...), license_key: str = For
     try:
         from extractor_llm import extract_financials_llm
         result = await extract_financials_llm(file_bytes, file.filename)
+        try:
+            from financial_normalizer import normalise_from_extractor_payload
+            result["normalised_model"] = normalise_from_extractor_payload(result)
+        except Exception:
+            pass
         return JSONResponse(content=result)
     except Exception as e1:
         try:
@@ -189,11 +196,50 @@ async def import_financials(file: UploadFile = File(...), license_key: str = For
             mapped = map_to_bp_actuals(raw)
             proj   = build_projections_from_actuals(mapped)
             Path(tmp_path).unlink(missing_ok=True)
-            return JSONResponse(content={"success": True, "fallback": True,
+            resp={"success": True, "fallback": True,
                 "data_quality": proj["data_quality"], "hist_years": proj["hist_years"],
-                "last_actuals": proj["last_actuals"], "suggestions": proj["proj_assumptions"]})
+                "last_actuals": proj["last_actuals"], "suggestions": proj["proj_assumptions"]}
+            try:
+                from financial_normalizer import normalise_from_extractor_payload
+                resp["normalised_model"] = normalise_from_extractor_payload(resp)
+            except Exception:
+                pass
+            return JSONResponse(content=resp)
         except Exception as e2:
             raise HTTPException(status_code=500, detail=str(e2))
+
+class DeckGenerateRequest(BaseModel):
+    license_key: str
+    config: dict = {}
+    extracted_payload: dict = {}
+
+@app.post("/api/generate_deck")
+def generate_deck(req: DeckGenerateRequest):
+    _check_license(req.license_key)
+    try:
+        from deck_generator import generate_im_deck_from_payload, generate_im_deck_from_config
+        file_id = str(uuid.uuid4())
+        out = str(DECKS_DIR / f"im_{file_id}.pptx")
+        template_path = BASE_DIR / "templates" / "kpmg" / "Book Schemas Janvier 2023.pptx"
+        template = str(template_path) if template_path.exists() else None
+        if req.extracted_payload:
+            meta = generate_im_deck_from_payload(req.extracted_payload, out, template_path=template)
+        else:
+            meta = generate_im_deck_from_config(req.config, out, template_path=template)
+        company = (meta.get("company_name") or "Target").replace(" ", "_")[:30]
+        return {"success": True, "file_id": file_id, "filename": f"{company}_IM_deck.pptx", "meta": meta}
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=str(e) + "\n" + traceback.format_exc()[-1200:])
+
+@app.get("/api/download_deck/{file_id}")
+def download_deck(file_id: str):
+    path = DECKS_DIR / f"im_{file_id}.pptx"
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="Deck not found or expired")
+    return FileResponse(str(path),
+        media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        filename="Information_Memorandum.pptx")
 
 @app.get("/")
 def root():
