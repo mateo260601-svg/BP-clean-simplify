@@ -68,7 +68,7 @@ def build_debt_sheet(wb, engine, config, periods, annual_cols, LCOL, UCOL, DCOL,
     cell.alignment = AL("left")
 
     # Period headers (4 rows)
-    from build_v3 import write_period_headers
+    from build import write_period_headers
     write_period_headers(ws, 3, periods, annual_cols)
 
     MONTH_ABBR = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
@@ -76,7 +76,7 @@ def build_debt_sheet(wb, engine, config, periods, annual_cols, LCOL, UCOL, DCOL,
     def ag_sum(vals, ag_dict, year):
         return sum(vals[i] for i in ag_dict.get(year, []) if i < len(vals))
 
-    from build_v4 import gen_periods, annual_groups
+    from build import gen_periods, annual_groups
     ag_dict = annual_groups(periods)
     years = sorted(ag_dict.keys())
 
