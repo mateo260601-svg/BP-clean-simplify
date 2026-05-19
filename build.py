@@ -481,6 +481,56 @@ def spacer_row(ws, row, n_months, annual_cols, height=5):
 C["blue_mid"] = "A8C8E8"
 
 def build_model(config, output_path):
+    # ── Defensive sanitiser — convert None/str to correct types ──────────────
+    def _f(key, default):
+        v = config.get(key, default)
+        try: return float(v) if v is not None else default
+        except: return default
+    def _i(key, default):
+        v = config.get(key, default)
+        try: return int(v) if v is not None else default
+        except: return default
+    def _s(key, default):
+        v = config.get(key, default)
+        return str(v) if v is not None else default
+
+    config["company_name"]   = _s("company_name", "Company")
+    config["currency"]       = _s("currency", "USD")
+    config["business_type"]  = _s("business_type", "industrial")
+    config["scenarios"]      = _s("scenarios", "base")
+    config["n_years"]        = _i("n_years", 5)
+    config["start_year"]     = _i("start_year", 2025)
+    config["actuals_months"] = _i("actuals_months", 0)
+    config["opening_cash"]   = _f("opening_cash", 5000)
+    config["base_revenue"]   = _f("base_revenue", 50000)
+    config["revenue_growth"] = _f("revenue_growth", 0.05)
+    config["gross_margin"]   = _f("gross_margin", 0.35)
+    config["ebitda_margin"]  = _f("ebitda_margin", 0.20)
+    config["dso"]            = _f("dso", 60)
+    config["dio"]            = _f("dio", 20)
+    config["dio_rm"]         = _f("dio_rm", 30)
+    config["dpo"]            = _f("dpo", 30)
+    config["tax_rate"]       = _f("tax_rate", 0.25)
+    config["inflation"]      = _f("inflation", 0.025)
+    config["price_per_mt"]   = _f("price_per_mt", 2000)
+    config["capacity_mt"]    = _f("capacity_mt", 72000)
+    cpx = config.get("capex") or {}
+    config["capex"] = {
+        "opening_ppe":  float(cpx.get("opening_ppe")  or 85000),
+        "maint_capex":  float(cpx.get("maint_capex")  or 2000),
+        "expan_capex":  float(cpx.get("expan_capex")  or 5000),
+        "useful_life":  int(cpx.get("useful_life")    or 20),
+    }
+    # Debt: ensure total_debt has a fallback from tranches
+    dbt = config.get("debt") or {}
+    if not dbt.get("total_debt"):
+        tranches = dbt.get("tranches") or []
+        dbt["total_debt"] = sum(float(t.get("amount",0) or 0) for t in tranches if isinstance(t,dict))
+    if not dbt.get("interest_rate"):
+        dbt["interest_rate"] = 0.065
+    config["debt"] = dbt
+    # ─────────────────────────────────────────────────────────────────────────
+
     wb = Workbook()
     wb.remove(wb.active)
 
