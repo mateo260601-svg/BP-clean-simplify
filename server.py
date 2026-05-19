@@ -172,8 +172,8 @@ async def import_financials(file: UploadFile = File(...), license_key: str = For
     if ext not in {"xlsx","xls","xlsm","csv","pdf"}:
         raise HTTPException(status_code=400, detail=f"Unsupported: .{ext}")
     file_bytes = await file.read()
-    if len(file_bytes) > 20*1024*1024:
-        raise HTTPException(status_code=400, detail="File too large (max 20MB)")
+    if len(file_bytes) > 50*1024*1024:
+        raise HTTPException(status_code=400, detail="File too large (max 50MB)")
     try:
         from extractor_llm import extract_financials_llm
         result = await extract_financials_llm(file_bytes, file.filename)
