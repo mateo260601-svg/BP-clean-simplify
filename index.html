@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BP Generator — MG</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#0D1B3E;min-height:100vh;display:flex;align-items:center;justify-content:center}
+  .card{background:#fff;border-radius:16px;padding:48px 40px;width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+  .logo{text-align:center;margin-bottom:32px}
+  .logo-circle{width:72px;height:72px;background:#0D1B3E;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px}
+  .logo-circle span{color:#fff;font-size:28px;font-weight:700;letter-spacing:-1px}
+  .logo h1{color:#0D1B3E;font-size:20px;font-weight:700;letter-spacing:1px}
+  .logo p{color:#6b7280;font-size:12px;margin-top:4px}
+  label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px}
+  input{width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:15px;outline:none;letter-spacing:2px;text-transform:uppercase}
+  input:focus{border-color:#0D1B3E}
+  .btn{width:100%;padding:14px;background:#0D1B3E;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px;transition:background 0.2s}
+  .btn:hover{background:#1A2F5A}
+  .error{color:#dc2626;font-size:13px;margin-top:10px;text-align:center;display:none}
+  .wizard{display:none}
+  .step{display:none}
+  .step.active{display:block}
+  .step-header{background:#0D1B3E;color:#fff;padding:20px 24px;border-radius:12px;margin-bottom:24px}
+  .step-header h2{font-size:18px;font-weight:700}
+  .step-header p{font-size:13px;opacity:0.7;margin-top:4px}
+  .progress{display:flex;gap:8px;margin-bottom:28px}
+  .progress-dot{flex:1;height:4px;background:#e5e7eb;border-radius:2px}
+  .progress-dot.done{background:#0D1B3E}
+  .form-group{margin-bottom:18px}
+  .form-group label{font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;display:block}
+  .form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;outline:none;background:#fff}
+  .form-group input:focus,.form-group select:focus{border-color:#0D1B3E}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .nav{display:flex;gap:12px;margin-top:28px}
+  .btn-back{flex:1;padding:12px;background:#f3f4f6;color:#374151;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn-next{flex:2;padding:12px;background:#0D1B3E;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn-next:hover{background:#1A2F5A}
+  .debt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .debt-item{border:1.5px solid #e5e7eb;border-radius:8px;padding:12px;cursor:pointer;transition:all 0.2s}
+  .debt-item.selected{border-color:#0D1B3E;background:#f0f4ff}
+  .debt-item h4{font-size:13px;font-weight:600;color:#374151}
+  .debt-item p{font-size:11px;color:#6b7280;margin-top:2px}
+  .summary-table{width:100%;border-collapse:collapse;font-size:13px}
+  .summary-table td{padding:8px 4px;border-bottom:1px solid #f3f4f6}
+  .summary-table td:first-child{color:#6b7280}
+  .summary-table td:last-child{font-weight:600;text-align:right}
+  .generating{text-align:center;padding:40px 0;display:none}
+  .spinner{width:48px;height:48px;border:4px solid #e5e7eb;border-top-color:#0D1B3E;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .done-screen{text-align:center;padding:20px 0;display:none}
+  .done-icon{font-size:56px;margin-bottom:12px}
+  .btn-dl{display:inline-block;padding:14px 32px;background:#0D1B3E;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;margin-top:8px}
+  .user-badge{background:#f0f4ff;border-radius:8px;padding:10px 14px;margin-bottom:24px;font-size:13px;color:#374151}
+  .user-badge span{font-weight:700;color:#0D1B3E}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen" class="card">
+  <div class="logo">
+    <div class="logo-circle"><span>MG</span></div>
+    <h1>BP GENERATOR</h1>
+    <p>Professional Business Plan Builder</p>
+  </div>
+  <label for="license">Access Code</label>
+  <input type="text" id="license" placeholder="JRC-XXXX-XXXX" autocomplete="off">
+  <button class="btn" onclick="doLogin()">Sign In</button>
+  <div class="error" id="login-error">Invalid access code. Please try again.</div>
+</div>
+
+<!-- WIZARD -->
+<div id="wizard-screen" class="card" style="width:520px;display:none">
+  <div class="user-badge">Logged in as <span id="user-name"></span></div>
+  <div class="progress" id="progress-bar"></div>
+
+  <!-- Step 1: Company -->
+  <div class="step active" id="step-1">
+    <div class="step-header"><h2>Company Information</h2><p>Step 1 of 6 — Basic details</p></div>
+    <div class="form-group"><label>Company Name</label><input type="text" id="company_name" placeholder="e.g. Acme Industries"></div>
+    <div class="row">
+      <div class="form-group"><label>Currency</label>
+        <select id="currency"><option value="USD">USD ($)</option><option value="EUR">EUR (€)</option><option value="GBP">GBP (£)</option><option value="AED">AED (د.إ)</option></select>
+      </div>
+      <div class="form-group"><label>Reporting Unit</label>
+        <select id="unit"><option value="k">Thousands (k)</option><option value="m">Millions (m)</option></select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group"><label>First Projection Year</label><input type="number" id="start_year" value="2025"></div>
+      <div class="form-group"><label>Years to Project</label>
+        <select id="n_years"><option value="3">3 years</option><option value="5" selected>5 years</option><option value="7">7 years</option><option value="10">10 years</option></select>
+      </div>
+    </div>
+    <div class="nav"><button class="btn-next" onclick="nextStep()">Next →</button></div>
+  </div>
+
+  <!-- Step 2: Business Type -->
+  <div class="step" id="step-2">
+    <div class="step-header"><h2>Business Type</h2><p>Step 2 of 6 — Revenue model</p></div>
+    <div class="form-group"><label>Business Model</label>
+      <select id="business_type">
+        <option value="industrial">Industrial / Manufacturing</option>
+        <option value="services">Professional Services</option>
+        <option value="saas">SaaS / Subscription</option>
+        <option value="retail">Retail / Distribution</option>
+        <option value="real_estate">Real Estate</option>
+        <option value="lbo">LBO / Acquisition</option>
+      </select>
+    </div>
+    <div class="row">
+      <div class="form-group"><label>Base Revenue (Year 1)</label><input type="number" id="base_revenue" value="50000"></div>
+      <div class="form-group"><label>Revenue Growth %</label><input type="number" id="revenue_growth" value="5" step="0.5"></div>
+    </div>
+    <div class="row">
+      <div class="form-group"><label>Gross Margin %</label><input type="number" id="gross_margin" value="35" step="0.5"></div>
+      <div class="form-group"><label>EBITDA Margin %</label><input type="number" id="ebitda_margin" value="20" step="0.5"></div>
+    </div>
+    <div class="nav"><button class="btn-back" onclick="prevStep()">← Back</button><button class="btn-next" onclick="nextStep()">Next →</button></div>
+  </div>
+
+  <!-- Step 3: NWC & Capex -->
+  <div class="step" id="step-3">
+    <div class="step-header"><h2>NWC & Capital Expenditure</h2><p>Step 3 of 6 — Working capital</p></div>
+    <div class="row">
+      <div class="form-group"><label>DSO (days)</label><input type="number" id="dso" value="45"></div>
+      <div class="form-group"><label>DIO (days)</label><input type="number" id="dio" value="30"></div>
+    </div>
+    <div class="row">
+      <div class="form-group"><label>DPO (days)</label><input type="number" id="dpo" value="40"></div>
+      <div class="form-group"><label>Opening PP&E</label><input type="number" id="opening_ppe" value="85000"></div>
+    </div>
+    <div class="row">
+      <div class="form-group"><label>Maintenance Capex</label><input type="number" id="maint_capex" value="2000"></div>
+      <div class="form-group"><label>Expansion Capex</label><input type="number" id="expan_capex" value="5000"></div>
+    </div>
+    <div class="nav"><button class="btn-back" onclick="prevStep()">← Back</button><button class="btn-next" onclick="nextStep()">Next →</button></div>
+  </div>
+
+  <!-- Step 4: Debt -->
+  <div class="step" id="step-4">
+    <div class="step-header"><h2>Debt Structure</h2><p>Step 4 of 6 — Select active tranches</p></div>
+    <div class="debt-grid" id="debt-grid">
+      <div class="debt-item selected" data-key="senior_a" onclick="toggleDebt(this)"><h4>Senior Term Loan A</h4><p>Amortising, EURIBOR+</p></div>
+      <div class="debt-item" data-key="senior_b" onclick="toggleDebt(this)"><h4>Senior Term Loan B</h4><p>Bullet, EURIBOR+</p></div>
+      <div class="debt-item" data-key="revolving" onclick="toggleDebt(this)"><h4>Revolving Credit Facility</h4><p>Drawn/undrawn</p></div>
+      <div class="debt-item" data-key="mezz" onclick="toggleDebt(this)"><h4>Mezzanine</h4><p>PIK / cash pay</p></div>
+      <div class="debt-item" data-key="murabaha" onclick="toggleDebt(this)"><h4>Murabaha (Islamic)</h4><p>Sharia-compliant</p></div>
+      <div class="debt-item" data-key="leasing" onclick="toggleDebt(this)"><h4>Finance Lease / IFRS16</h4><p>Right-of-use assets</p></div>
+    </div>
+    <div class="form-group" style="margin-top:16px"><label>Total Gross Debt</label><input type="number" id="total_debt" value="30000"></div>
+    <div class="form-group"><label>Avg. Interest Rate %</label><input type="number" id="interest_rate" value="6.5" step="0.25"></div>
+    <div class="nav"><button class="btn-back" onclick="prevStep()">← Back</button><button class="btn-next" onclick="nextStep()">Next →</button></div>
+  </div>
+
+  <!-- Step 5: Tax & Scenarios -->
+  <div class="step" id="step-5">
+    <div class="step-header"><h2>Tax & Scenarios</h2><p>Step 5 of 6 — Final parameters</p></div>
+    <div class="row">
+      <div class="form-group"><label>Tax Rate %</label><input type="number" id="tax_rate" value="25"></div>
+      <div class="form-group"><label>Inflation %</label><input type="number" id="inflation" value="2.5" step="0.5"></div>
+    </div>
+    <div class="form-group"><label>Generate Scenarios</label>
+      <select id="scenarios"><option value="base">Base Case only</option><option value="all">Low / Base / Best Case</option></select>
+    </div>
+    <div class="form-group"><label>Output Format</label>
+      <select id="output_format"><option value="full">Full model (all sheets)</option><option value="summary">Summary only</option></select>
+    </div>
+    <div class="nav"><button class="btn-back" onclick="prevStep()">← Back</button><button class="btn-next" onclick="nextStep()">Review →</button></div>
+  </div>
+
+  <!-- Step 6: Review & Generate -->
+  <div class="step" id="step-6">
+    <div class="step-header"><h2>Review & Generate</h2><p>Step 6 of 6 — Confirm and build</p></div>
+    <table class="summary-table" id="summary-table"></table>
+    <div class="nav"><button class="btn-back" onclick="prevStep()">← Back</button><button class="btn-next" onclick="generate()">⚡ Generate Excel</button></div>
+  </div>
+
+  <!-- Generating -->
+  <div class="generating" id="generating">
+    <div class="spinner"></div>
+    <p style="color:#374151;font-weight:600">Building your model...</p>
+    <p style="color:#6b7280;font-size:13px;margin-top:8px">Creating all sheets, formulas and schedules</p>
+  </div>
+
+  <!-- Done -->
+  <div class="done-screen" id="done-screen">
+    <div class="done-icon">✅</div>
+    <h2 style="color:#0D1B3E;font-size:22px;font-weight:700">Model Ready</h2>
+    <p style="color:#6b7280;font-size:14px;margin-top:8px;margin-bottom:20px">Your Excel BP has been generated successfully.</p>
+    <a id="dl-link" class="btn-dl" href="#">⬇ Download Excel</a>
+    <br><br>
+    <button class="btn-back" style="width:100%" onclick="resetWizard()">+ New Model</button>
+  </div>
+</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 6;
+let licenseKey = '';
+let fileId = '';
+const API = '';
+
+function buildProgress() {
+  const bar = document.getElementById('progress-bar');
+  bar.innerHTML = '';
+  for (let i = 1; i <= totalSteps; i++) {
+    const d = document.createElement('div');
+    d.className = 'progress-dot' + (i <= currentStep ? ' done' : '');
+    bar.appendChild(d);
+  }
+}
+
+async function doLogin() {
+  const key = document.getElementById('license').value.trim();
+  const err = document.getElementById('login-error');
+  try {
+    const r = await fetch(API + '/api/auth/login', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({license_key: key})
+    });
+    const d = await r.json();
+    if (!r.ok) { err.style.display = 'block'; err.textContent = d.detail || 'Invalid key'; return; }
+    licenseKey = key;
+    document.getElementById('user-name').textContent = d.user;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('wizard-screen').style.display = 'block';
+    buildProgress();
+  } catch(e) { err.style.display = 'block'; err.textContent = 'Connection error. Try again.'; }
+}
+
+function nextStep() {
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  currentStep++;
+  if (currentStep === 6) buildSummary();
+  document.getElementById('step-' + currentStep).classList.add('active');
+  buildProgress();
+}
+
+function prevStep() {
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  currentStep--;
+  document.getElementById('step-' + currentStep).classList.add('active');
+  buildProgress();
+}
+
+function toggleDebt(el) { el.classList.toggle('selected'); }
+
+function val(id) { return document.getElementById(id).value; }
+
+function buildSummary() {
+  const rows = [
+    ['Company', val('company_name')], ['Currency', val('currency')],
+    ['Projection', val('n_years') + ' years from ' + val('start_year')],
+    ['Business type', val('business_type')], ['Base revenue', parseInt(val('base_revenue')).toLocaleString()],
+    ['Revenue growth', val('revenue_growth') + '%'], ['EBITDA margin', val('ebitda_margin') + '%'],
+    ['Total debt', parseInt(val('total_debt')).toLocaleString()], ['Tax rate', val('tax_rate') + '%'],
+    ['Scenarios', val('scenarios')]
+  ];
+  const t = document.getElementById('summary-table');
+  t.innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+}
+
+function getSelectedDebts() {
+  return Array.from(document.querySelectorAll('.debt-item.selected')).map(e => e.dataset.key);
+}
+
+async function generate() {
+  document.getElementById('step-6').style.display = 'none';
+  document.getElementById('generating').style.display = 'block';
+  const config = {
+    company_name: val('company_name'), currency: val('currency'), unit: val('unit'),
+    start_year: parseInt(val('start_year')), n_years: parseInt(val('n_years')),
+    business_type: val('business_type'), base_revenue: parseFloat(val('base_revenue')),
+    revenue_growth: parseFloat(val('revenue_growth')) / 100,
+    gross_margin: parseFloat(val('gross_margin')) / 100,
+    ebitda_margin: parseFloat(val('ebitda_margin')) / 100,
+    dso: parseFloat(val('dso')), dio: parseFloat(val('dio')), dpo: parseFloat(val('dpo')),
+    capex: { opening_ppe: parseFloat(val('opening_ppe')), maint_capex: parseFloat(val('maint_capex')), expan_capex: parseFloat(val('expan_capex')) },
+    debt: { tranches: getSelectedDebts(), total_debt: parseFloat(val('total_debt')), interest_rate: parseFloat(val('interest_rate')) / 100 },
+    tax_rate: parseFloat(val('tax_rate')) / 100, inflation: parseFloat(val('inflation')) / 100,
+    scenarios: val('scenarios'), output_format: val('output_format')
+  };
+  try {
+    const r = await fetch(API + '/api/generate', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({license_key: licenseKey, config})
+    });
+    const d = await r.json();
+    if (!r.ok) { alert('Error: ' + (d.detail || 'Generation failed')); resetWizard(); return; }
+    fileId = d.file_id;
+    document.getElementById('dl-link').href = API + '/api/download/' + fileId;
+    document.getElementById('dl-link').download = d.filename;
+    document.getElementById('generating').style.display = 'none';
+    document.getElementById('done-screen').style.display = 'block';
+  } catch(e) { alert('Connection error: ' + e.message); resetWizard(); }
+}
+
+function resetWizard() {
+  document.getElementById('done-screen').style.display = 'none';
+  document.getElementById('generating').style.display = 'none';
+  currentStep = 1;
+  for (let i = 1; i <= totalSteps; i++) {
+    const s = document.getElementById('step-' + i);
+    s.classList.remove('active');
+    s.style.display = '';
+  }
+  document.getElementById('step-1').classList.add('active');
+  buildProgress();
+}
+
+document.getElementById('license').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+</script>
+</body>
+</html>
