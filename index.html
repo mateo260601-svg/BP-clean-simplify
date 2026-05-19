@@ -404,7 +404,7 @@ setInterval(()=>{mi=(mi+1)%4;["f1","f2","f3","f4","f5","f6"].forEach((id,i)=>{co
 
 /* ── STATE ── */
 const API="";
-let lic="",user="",step=0,fid=null,selFile=null;
+let lic="",user="",step=0,fid=null,selFile=null,lastImport=null;
 const cfg={
   company:{name:"",sector:"industrial",currency:"USD",units:"thousands",fy_start:1,period:"monthly"},
   rev:{start_year:new Date().getFullYear(),proj_years:5,act_years:2,volume:180000,price:1050,vgrow:5,pgrow:2,capacity:220000},
@@ -834,7 +834,7 @@ async function doAnalyze(){
     const fd=new FormData();fd.append("file",selFile);fd.append("license_key",lic);
     const r=await fetch(API+"/api/import",{method:"POST",body:fd});
     const d=await r.json();clearInterval(iv);prog.style.display="none";
-    if(d.success||d.suggestions){applyImport(d);res.innerHTML=showImport(d);res.style.display="block";}
+    if(d.success||d.suggestions){lastImport=d;applyImport(d);res.innerHTML=showImport(d);res.style.display="block";}
     else{res.innerHTML=`<div class="alert a-warn"><span>⚠️</span><span>${d.detail||"Import failed"}</span></div>`;res.style.display="block";}
   }catch(e){clearInterval(iv);prog.style.display="none";res.innerHTML=`<div class="alert a-warn"><span>⚠️</span><span>${e.message}</span></div>`;res.style.display="block";}
   btn.disabled=false;
@@ -863,6 +863,7 @@ function showImport(d){
       ${[["Revenue",fmt(la.revenue)],["EBITDA",fmt(la.ebitda)],["Net Income",fmt(la.net_income)],["Gross Debt",fmt(la.gross_debt)],["Cash",fmt(la.cash)]].map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
     </tbody></table></div>
     <div class="alert a-ok" style="margin-top:12px"><span>✅</span><span>Assumptions pre-filled from historical data. Review and adjust in following steps.</span></div>
+    <button class="btn btn-ok btn-lg" onclick="genDeckFromImport()" style="width:100%;justify-content:center;margin-top:10px">📊 Generate IM Deck from Upload</button>
   </div>`;}
 
 function bindCompany(){
@@ -946,6 +947,7 @@ async function genBP(){
         <div class="suc-f">${d.filename}</div>
         <div class="suc-sheets">${sheets.map(s=>`<span class="sp">${s}</span>`).join("")}</div>
         <button class="btn btn-ok btn-lg" onclick="dlBP('${d.file_id}','${d.filename}')" style="width:100%;justify-content:center">⬇ Download Excel Model</button>
+        <button class="btn btn-g btn-sm" onclick="genDeckFromConfig()" style="width:100%;margin-top:8px;justify-content:center">📊 Generate IM Deck</button>
         <button class="btn btn-g btn-sm" onclick="resetAll()" style="width:100%;margin-top:8px;justify-content:center">+ New Model</button>
       </div>`;
   }catch(e){
@@ -963,6 +965,37 @@ async function dlBP(fid,fname){
     document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
   }catch(e){alert("Download error: "+e.message);}
 }
+
+async function genDeckFromImport(){
+  if(!lastImport){alert("Upload and analyse a document first.");return;}
+  await genDeck({extracted_payload:lastImport, config:{}});
+}
+async function genDeckFromConfig(){
+  const payload={
+    company:{name:cfg.company.name,sector:cfg.company.sector,currency:cfg.company.currency,units:cfg.company.units},
+    revenue:{start_year:cfg.rev.start_year,projection_years:cfg.rev.proj_years,base_volume:cfg.rev.volume,price_per_unit:cfg.rev.price,volume_growth:cfg.rev.vgrow,price_growth:cfg.rev.pgrow,capacity_mt:cfg.rev.capacity,base_revenue:cfg.rev.base_revenue},
+    costs:{gross_margin:cfg.costs.gm,ebitda_margin:cfg.costs.ebitda,sga_pct:cfg.costs.sga},
+    debt:{tranches:cfg.debt.tranches.map(t=>({...t,amount:+t.amount||0,name:t.n,currency:t.ccy}))},
+    opening_cash:cfg.cash
+  };
+  await genDeck({config:payload, extracted_payload:{}});
+}
+async function genDeck(body){
+  try{
+    const r=await fetch(API+"/api/generate_deck",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({license_key:lic,...body})});
+    const d=await r.json();
+    if(!r.ok||!d.success)throw new Error(d.detail||"Deck generation failed");
+    await dlDeck(d.file_id,d.filename);
+  }catch(e){alert("Deck error: "+e.message);}
+}
+async function dlDeck(fid,fname){
+  const r=await fetch(API+"/api/download_deck/"+fid,{headers:{"x-license":lic}});
+  if(!r.ok)throw new Error("Deck download failed");
+  const blob=await r.blob();const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=fname||"Information_Memorandum.pptx";
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
 </script>
 </body>
 </html>
