@@ -164,6 +164,8 @@ async def call_claude_extract(raw_text: str) -> Dict:
     """Call Claude API asynchronously to extract structured financial data."""
     import httpx
 
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise RuntimeError("ANTHROPIC_API_KEY is not configured")
     prompt = EXTRACTION_PROMPT.format(raw_text=raw_text[:10000])
 
     payload = {
@@ -176,7 +178,11 @@ async def call_claude_extract(raw_text: str) -> Dict:
     async with httpx.AsyncClient(timeout=60.0) as client:
         r = await client.post(
             ANTHROPIC_API_URL,
-            headers={"Content-Type": "application/json"},
+            headers={
+                "Content-Type": "application/json",
+                "x-api-key": os.environ.get("ANTHROPIC_API_KEY", ""),
+                "anthropic-version": "2023-06-01",
+            },
             json=payload,
         )
         r.raise_for_status()
@@ -411,11 +417,33 @@ async def extract_financials_llm(file_bytes: bytes, filename: str) -> Dict:
     hist_table  = build_historical_table(extracted)
     quality     = quality_score(extracted)
 
+    # Legacy fields used by the current frontend
+    last = hist_table[-1] if hist_table else {}
+    last_actuals = {
+        "revenue": last.get("net_revenue", 0),
+        "ebitda": last.get("ebitda_adj", 0),
+        "net_income": last.get("net_income", 0),
+        "gross_debt": last.get("financial_debt", 0),
+        "cash": last.get("cash", 0),
+    }
+    legacy_suggestions = {
+        "revenue": [suggestions.get("base_revenue")] if suggestions.get("base_revenue") else [],
+        "revenue_growth": [suggestions.get("revenue_growth", 0) / 100] if suggestions.get("revenue_growth") is not None else [],
+        "ebitda_margin": [suggestions.get("ebitda_margin", 0) / 100] if suggestions.get("ebitda_margin") is not None else [],
+        "dso": [suggestions.get("dso")] if suggestions.get("dso") else [],
+        "dio": [suggestions.get("dio")] if suggestions.get("dio") else [],
+        "dpo": [suggestions.get("dpo")] if suggestions.get("dpo") else [],
+    }
+
     return {
-        "extracted":       extracted,
-        "suggestions":     suggestions,
-        "historical_table":hist_table,
-        "quality":         quality,
-        "hist_years":      extracted.get("periods", []),
-        "filename":        filename,
+        "success": True,
+        "extracted": extracted,
+        "suggestions": legacy_suggestions,
+        "modern_suggestions": suggestions,
+        "historical_table": hist_table,
+        "quality": quality,
+        "data_quality": {"score": quality.get("score", 0), "label": quality.get("label", "Partial")},
+        "hist_years": extracted.get("periods", []),
+        "last_actuals": last_actuals,
+        "filename": filename,
     }
