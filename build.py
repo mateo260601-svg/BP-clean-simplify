@@ -1500,4 +1500,10 @@ def build_model(config, output_path):
             scrow("Net Leverage (x)", [nd/max(ae,0.001) for nd,ae in zip(sc_nd,sc_ae)], fmt=FMT["mult"], unit="x")
 
     wb.save(output_path)
+    try:
+        from formatters import apply_elite_workbook_formatting
+        apply_elite_workbook_formatting(output_path)
+    except Exception as fmt_error:
+        # Never block model generation because of cosmetic formatting.
+        print(f"Elite formatting skipped: {fmt_error}")
     return output_path
