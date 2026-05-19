@@ -4,290 +4,251 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BP Investment Banking Suite</title>
-
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Inter,sans-serif;
-}
-
-body{
-background:#020617;
-overflow:hidden;
-color:white;
-}
-
-#bg{
-position:fixed;
-inset:0;
-width:100%;
-height:100%;
-pointer-events:none;
-z-index:0;
-}
-
-.center{
-position:relative;
-z-index:10;
-width:100%;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-}
-
-.card{
-width:100%;
-max-width:680px;
-background:rgba(2,6,23,.92);
-border:1px solid rgba(255,255,255,.06);
-border-radius:28px;
-padding:42px;
-backdrop-filter:blur(16px);
-box-shadow:0 20px 80px rgba(0,0,0,.55);
-}
-
-.logo{
-font-size:58px;
-font-weight:900;
-line-height:1;
-margin-bottom:18px;
-}
-
-.sub{
-color:#94A3B8;
-line-height:1.6;
-font-size:20px;
-margin-bottom:34px;
-}
-
-input{
-width:100%;
-padding:20px;
-border-radius:16px;
-border:none;
-outline:none;
-background:white;
-color:#0F172A;
-font-size:20px;
-font-weight:600;
-margin-bottom:18px;
-}
-
-button{
-width:100%;
-padding:18px;
-border:none;
-border-radius:16px;
-cursor:pointer;
-font-size:18px;
-font-weight:800;
-transition:.2s;
-}
-
-button:hover{
-transform:translateY(-1px);
-}
-
-.primary{
-background:white;
-color:#0F172A;
-margin-bottom:20px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-}
-
-.secondary{
-background:#172036;
-color:white;
-}
-
-.status{
-margin-top:22px;
-font-size:16px;
-color:#22C55E;
-min-height:24px;
-}
-
-.footer{
-margin-top:26px;
-text-align:center;
-color:#64748B;
-font-size:14px;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+body{background:#020617;color:#F8FAFC;min-height:100vh;overflow-x:hidden}
+.hidden{display:none!important}
+#bg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.login-wrap{position:relative;z-index:10;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{width:100%;max-width:680px;background:rgba(15,23,42,.92);border:1px solid rgba(148,163,184,.18);border-radius:30px;padding:44px;box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.logo{font-size:52px;line-height:1.05;font-weight:900;margin-bottom:18px}
+.sub{color:#94A3B8;font-size:18px;line-height:1.55;margin-bottom:30px}
+input,select,textarea{width:100%;padding:16px;border-radius:14px;border:1px solid rgba(148,163,184,.25);outline:none;background:#fff;color:#0F172A;font-size:16px}
+button{border:none;border-radius:14px;padding:15px 18px;font-size:15px;font-weight:800;cursor:pointer;transition:.18s}
+button:hover{transform:translateY(-1px)}
+.primary{width:100%;background:#fff;color:#020617;margin-top:14px}
+.status{margin-top:18px;min-height:24px;color:#22C55E}
+.app{position:relative;z-index:10;min-height:100vh;display:grid;grid-template-columns:280px 1fr;background:#020617}
+.sidebar{border-right:1px solid rgba(148,163,184,.14);background:rgba(15,23,42,.85);padding:24px;position:sticky;top:0;height:100vh}
+.brand{font-size:22px;font-weight:900;margin-bottom:6px}
+.brand-sub{font-size:12px;color:#94A3B8;margin-bottom:30px}
+.nav button{width:100%;text-align:left;background:transparent;color:#CBD5E1;margin-bottom:8px}
+.nav button.active,.nav button:hover{background:#1E293B;color:#fff}
+.main{padding:28px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+.topbar h1{font-size:32px}
+.badge{background:#064E3B;color:#6EE7B7;border:1px solid rgba(110,231,183,.25);padding:8px 12px;border-radius:999px;font-size:13px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:24px}
+.card{background:rgba(15,23,42,.9);border:1px solid rgba(148,163,184,.14);border-radius:22px;padding:22px;box-shadow:0 14px 40px rgba(0,0,0,.25)}
+.metric-label{color:#94A3B8;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.metric{font-size:30px;font-weight:900;margin-top:8px}
+.up{color:#22C55E;font-size:13px;margin-top:6px}
+.down{color:#EF4444;font-size:13px;margin-top:6px}
+.section{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-bottom:18px}
+h2{font-size:20px;margin-bottom:14px}
+p{color:#CBD5E1;line-height:1.55}
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.action{background:#2563EB;color:#fff}
+.action.dark{background:#1E293B}
+.drop{border:1px dashed rgba(148,163,184,.35);border-radius:18px;padding:28px;text-align:center;background:rgba(2,6,23,.5);margin-top:14px}
+.drop strong{display:block;font-size:18px;margin-bottom:8px}
+.table{width:100%;border-collapse:collapse;margin-top:12px}
+.table th,.table td{border-bottom:1px solid rgba(148,163,184,.14);padding:12px;text-align:left;color:#CBD5E1}
+.table th{color:#fff;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.module{display:none}
+.module.active{display:block}
+.footer{color:#64748B;font-size:12px;margin-top:28px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.grid,.section{grid-template-columns:1fr}.actions{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
-
 <canvas id="bg"></canvas>
 
-<div class="center">
+<section id="login" class="login-wrap">
+  <div class="login-card">
+    <div class="logo">BP Investment Banking Suite</div>
+    <div class="sub">Plateforme SaaS M&A pour extraction financière, génération Excel institutionnelle, QoE, restructuring, IM deck et reporting investisseur.</div>
+    <input id="licenseInput" type="text" placeholder="ENTER LICENSE KEY" autocomplete="off">
+    <button class="primary" id="accessBtn">Access Platform</button>
+    <div class="status" id="loginStatus">System ready</div>
+  </div>
+</section>
 
-<div class="card">
+<section id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand">MG Advisory</div>
+    <div class="brand-sub">Investment Banking OS</div>
+    <div class="nav">
+      <button class="active" data-module="dashboard">Dashboard</button>
+      <button data-module="upload">Upload Financials</button>
+      <button data-module="excel">Excel Model</button>
+      <button data-module="deck">IM Deck Generator</button>
+      <button data-module="qoe">QoE Analysis</button>
+      <button data-module="restructuring">Restructuring</button>
+      <button data-module="settings">Settings</button>
+    </div>
+  </aside>
 
-<div class="logo">
-BP Investment Banking Suite
-</div>
+  <main class="main">
+    <div class="topbar">
+      <h1 id="pageTitle">Dashboard</h1>
+      <div class="badge">Live • V2 Banking Suite</div>
+    </div>
 
-<div class="sub">
-AI-powered platform for Investment Memorandum generation,
-financial extraction, QoE analysis, restructuring workflows,
-investor reporting and elite M&A deliverables.
-</div>
+    <div id="dashboard" class="module active">
+      <div class="grid">
+        <div class="card"><div class="metric-label">Revenue</div><div class="metric">€202m</div><div class="up">▲ 7.3% YoY</div></div>
+        <div class="card"><div class="metric-label">EBITDA Margin</div><div class="metric">22.9%</div><div class="up">▲ 1.2pp</div></div>
+        <div class="card"><div class="metric-label">Net Leverage</div><div class="metric">4.9x</div><div class="down">▼ 0.6x vs PY</div></div>
+        <div class="card"><div class="metric-label">ICR</div><div class="metric">3.0x</div><div class="up">▲ 0.4x vs PY</div></div>
+      </div>
 
-<input
-id="licenseInput"
-type="text"
-placeholder="ENTER LICENSE KEY"
-autocomplete="off"
->
+      <div class="section">
+        <div class="card">
+          <h2>Deal Workspace</h2>
+          <p>Importe des comptes audités PDF ou des management accounts Excel. La plateforme normalise les états financiers, prépare un modèle Excel et sélectionne les slides IM adaptées.</p>
+          <div class="actions">
+            <button class="action" onclick="openModule('upload')">Upload Documents</button>
+            <button class="action dark" onclick="openModule('deck')">Generate IM Deck</button>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Workflow Status</h2>
+          <table class="table">
+            <tr><th>Module</th><th>Status</th></tr>
+            <tr><td>Document reader</td><td>Ready</td></tr>
+            <tr><td>Financial normalizer</td><td>Ready</td></tr>
+            <tr><td>Excel builder</td><td>Ready</td></tr>
+            <tr><td>Deck generator</td><td>Ready</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
 
-<button class="primary" id="accessBtn">
-Access Platform
-</button>
+    <div id="upload" class="module">
+      <div class="card">
+        <h2>Upload Financials</h2>
+        <p>Glisse ici les audited accounts PDF, management accounts Excel, trial balances, CIM ou reporting packs.</p>
+        <div class="drop">
+          <strong>Drop files here</strong>
+          <span>PDF, XLSX, XLS, CSV</span><br><br>
+          <input id="fileInput" type="file" multiple>
+        </div>
+        <div class="actions">
+          <button class="action" onclick="fakeProgress('Extraction started')">Start Extraction</button>
+          <button class="action dark" onclick="fakeProgress('Financials normalized')">Normalize Financials</button>
+        </div>
+      </div>
+    </div>
 
-<div class="grid">
+    <div id="excel" class="module">
+      <div class="card">
+        <h2>Elite Excel Model</h2>
+        <p>Génère un workbook niveau banque d'affaires : Summary, P&L, Balance Sheet, Cash Flow, KPIs, Charts, QoE Adjustments et Raw Data.</p>
+        <div class="actions">
+          <button class="action" onclick="callEndpoint('/api/generate_excel','Excel generation launched')">Generate Excel</button>
+          <button class="action dark" onclick="fakeProgress('Excel downloaded')">Download Latest Excel</button>
+        </div>
+      </div>
+    </div>
 
-<button class="secondary" id="excelBtn">
-Generate Excel
-</button>
+    <div id="deck" class="module">
+      <div class="card">
+        <h2>IM Deck Generator</h2>
+        <p>Sélection automatique des slides type IM selon les informations disponibles : investment highlights, market, customers, platform, financials, value creation, process.</p>
+        <table class="table">
+          <tr><th>Slide Type</th><th>Logic</th></tr>
+          <tr><td>Investment Highlights</td><td>Revenue, EBITDA, market position</td></tr>
+          <tr><td>Customer Portfolio</td><td>Clients, contracts, volumes</td></tr>
+          <tr><td>Financial Overview</td><td>P&L, KPIs, margin, growth</td></tr>
+          <tr><td>Value Creation</td><td>Forecast, EBITDA bridge, cash generation</td></tr>
+        </table>
+        <div class="actions">
+          <button class="action" onclick="callEndpoint('/api/generate_deck','IM deck generation launched')">Generate IM Deck</button>
+          <button class="action dark" onclick="fakeProgress('PowerPoint downloaded')">Download Latest Deck</button>
+        </div>
+      </div>
+    </div>
 
-<button class="secondary" id="deckBtn">
-Generate IM Deck
-</button>
+    <div id="qoe" class="module">
+      <div class="card">
+        <h2>Quality of Earnings</h2>
+        <p>Analyse normalised EBITDA, one-offs, working capital, cash conversion, debt-like items et bridge vers adjusted EBITDA.</p>
+        <div class="actions">
+          <button class="action" onclick="fakeProgress('QoE analysis launched')">Run QoE</button>
+          <button class="action dark" onclick="fakeProgress('QoE memo generated')">Generate QoE Memo</button>
+        </div>
+      </div>
+    </div>
 
-<button class="secondary" id="uploadBtn">
-Upload Financials
-</button>
+    <div id="restructuring" class="module">
+      <div class="card">
+        <h2>Restructuring Toolkit</h2>
+        <p>Liquidity runway, net debt bridge, covenant analysis, ICR/DSCR, downside case et stakeholder reporting.</p>
+        <div class="actions">
+          <button class="action" onclick="fakeProgress('Liquidity model started')">Liquidity Analysis</button>
+          <button class="action dark" onclick="fakeProgress('Restructuring pack started')">Generate Restructuring Pack</button>
+        </div>
+      </div>
+    </div>
 
-<button class="secondary" id="qoeBtn">
-Generate QoE
-</button>
+    <div id="settings" class="module">
+      <div class="card">
+        <h2>Settings</h2>
+        <p>Licence active, templates KPMG/Karesi chargés, backend Railway connecté.</p>
+        <table class="table">
+          <tr><th>Setting</th><th>Value</th></tr>
+          <tr><td>License</td><td>Active</td></tr>
+          <tr><td>Model</td><td>Investment Banking V2</td></tr>
+          <tr><td>Templates</td><td>KPMG + IM Karesi</td></tr>
+        </table>
+      </div>
+    </div>
 
-</div>
-
-<div class="status" id="status">
-System ready
-</div>
-
-<div class="footer">
-MG Advisory • Investment Banking Technology
-</div>
-
-</div>
-
-</div>
+    <div class="footer" id="globalStatus">MG Advisory • Confidential workspace</div>
+  </main>
+</section>
 
 <script>
-
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
-
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
+canvas.width=window.innerWidth;canvas.height=window.innerHeight;
 const particles=[];
-
-for(let i=0;i<120;i++){
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:Math.random()*2,
-dx:(Math.random()-.5)*0.35,
-dy:(Math.random()-.5)*0.35
-});
-}
-
-function animate(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="rgba(255,255,255,.55)";
-
-particles.forEach(p=>{
-
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fill();
-
-p.x+=p.dx;
-p.y+=p.dy;
-
-if(p.x<0||p.x>canvas.width) p.dx*=-1;
-if(p.y<0||p.y>canvas.height) p.dy*=-1;
-
-});
-
-requestAnimationFrame(animate);
-
-}
-
+for(let i=0;i<90;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2,dx:(Math.random()-.5)*.35,dy:(Math.random()-.5)*.35})}
+function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle="rgba(255,255,255,.45)";particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>canvas.width)p.dx*=-1;if(p.y<0||p.y>canvas.height)p.dy*=-1});requestAnimationFrame(animate)}
 animate();
 
+const validKeys=["JRC-MATEO-2025","MG-ACCESS-2025","BP-ELITE-2025"];
 const input=document.getElementById("licenseInput");
+setTimeout(()=>input.focus(),300);
+input.addEventListener("input",e=>e.target.value=e.target.value.toUpperCase());
 
-setTimeout(()=>{
-input.focus();
-},300);
+document.getElementById("accessBtn").onclick=()=>{
+  const key=input.value.trim();
+  if(validKeys.includes(key)){
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    document.body.style.overflow="auto";
+  }else{
+    document.getElementById("loginStatus").style.color="#EF4444";
+    document.getElementById("loginStatus").innerText="Invalid license key";
+  }
+};
 
-input.addEventListener("input",e=>{
-e.target.value=e.target.value.toUpperCase();
-});
+function openModule(id){
+  document.querySelectorAll(".module").forEach(m=>m.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  document.querySelector(`[data-module="${id}"]`)?.classList.add("active");
+  const titles={dashboard:"Dashboard",upload:"Upload Financials",excel:"Elite Excel Model",deck:"IM Deck Generator",qoe:"QoE Analysis",restructuring:"Restructuring Toolkit",settings:"Settings"};
+  document.getElementById("pageTitle").innerText=titles[id]||"Dashboard";
+}
+document.querySelectorAll(".nav button").forEach(btn=>btn.onclick=()=>openModule(btn.dataset.module));
 
-document.getElementById("accessBtn").addEventListener("click",()=>{
-
-const key=input.value.trim();
-
-if(
-key==="JRC-MATEO-2025" ||
-key==="MG-ACCESS-2025" ||
-key==="BP-ELITE-2025"
-){
-
-document.getElementById("status").innerText="Access granted";
-
-setTimeout(()=>{
-window.location.href="/app";
-},700);
-
-}else{
-
-document.getElementById("status").style.color="#EF4444";
-document.getElementById("status").innerText="Invalid license key";
-
+function fakeProgress(msg){
+  document.getElementById("globalStatus").innerText=msg;
 }
 
-});
-
-document.getElementById("excelBtn").addEventListener("click",()=>{
-document.getElementById("status").style.color="#22C55E";
-document.getElementById("status").innerText="Excel generation module ready";
-});
-
-document.getElementById("deckBtn").addEventListener("click",()=>{
-document.getElementById("status").style.color="#22C55E";
-document.getElementById("status").innerText="IM deck generation module ready";
-});
-
-document.getElementById("uploadBtn").addEventListener("click",()=>{
-document.getElementById("status").style.color="#22C55E";
-document.getElementById("status").innerText="Financial upload module ready";
-});
-
-document.getElementById("qoeBtn").addEventListener("click",()=>{
-document.getElementById("status").style.color="#22C55E";
-document.getElementById("status").innerText="QoE analysis module ready";
-});
-
+async function callEndpoint(endpoint,msg){
+  document.getElementById("globalStatus").innerText=msg;
+  try{
+    const res=await fetch(endpoint,{method:"POST"});
+    if(res.ok){document.getElementById("globalStatus").innerText=msg+" • backend OK";}
+    else{document.getElementById("globalStatus").innerText=msg+" • backend endpoint not ready yet";}
+  }catch(e){
+    document.getElementById("globalStatus").innerText=msg+" • backend endpoint not ready yet";
+  }
+}
 </script>
-
 </body>
 </html>
