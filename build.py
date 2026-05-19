@@ -1004,15 +1004,44 @@ def build_model(config, output_path):
     tranche_debt = total_debt / max(len(active), 1)
 
     for t in active:
-        t_key = t.get('key', t) if isinstance(t, dict) else t
-        section_row(ws_ds, R.next(), tranche_names.get(t_key, str(t_key)), n_m, annual_cols, level=2)
-        t_op  = [max(tranche_debt - tranche_debt/n_m*i, 0) for i in range(n_m)]
-        t_rep = [tranche_debt/n_m]*n_m
-        t_int = [op * int_rate/12 for op in t_op]
-        t_cl  = [max(op - rep, 0) for op,rep in zip(t_op,t_rep)]
+        if isinstance(t, dict):
+            t_key = t.get('key', t.get('type', 'tranche'))
+            t_name = t.get('name', t.get('type', tranche_names.get(t_key, str(t_key))))
+            t_amount = float(t.get('amount', tranche_debt) or tranche_debt)
+            t_rate = float(t.get('rate', int_rate * 100) or int_rate * 100) / 100
+            t_pik = float(t.get('pik_rate', 0) or 0) / 100
+            t_tenor_m = int(float(t.get('tenor', 7)) * 12)
+            t_amort = t.get('amortization', 'linear')
+            t_freq = t.get('frequency', 'quarterly')
+            t_drawn = float(t.get('drawn_pct', 1.0) or 1.0)
+        else:
+            t_key = t
+            t_name = tranche_names.get(t_key, str(t_key))
+            t_amount = tranche_debt
+            t_rate = int_rate
+            t_pik = 0.0
+            t_tenor_m = n_m
+            t_amort = 'linear'
+            t_freq = 'quarterly'
+            t_drawn = 1.0
+        section_row(ws_ds, R.next(), t_name, n_m, annual_cols, level=2)
+        # Per-tranche amortization
+        if t_amort == 'bullet':
+            t_op  = [t_amount * t_drawn] * n_m
+            t_rep = [0.0] * (n_m - 1) + [t_amount * t_drawn]
+        elif t_amort == 'linear':
+            t_op  = [max(t_amount * t_drawn - t_amount * t_drawn / max(t_tenor_m, n_m) * i, 0) for i in range(n_m)]
+            t_rep = [t_amount * t_drawn / max(t_tenor_m, n_m)] * n_m
+        else:
+            t_op  = [max(t_amount * t_drawn - t_amount * t_drawn / n_m * i, 0) for i in range(n_m)]
+            t_rep = [t_amount * t_drawn / n_m] * n_m
+        t_int_cash = [op * t_rate / 12 for op in t_op]
+        t_int_pik  = [op * t_pik  / 12 for op in t_op]
+        t_cl  = [max(op - rep, 0) for op, rep in zip(t_op, t_rep)]
         dsr("Opening Balance", t_op, indent=1, bg=C["input_bg"], input_=True)
         dsr("Repayments  (scheduled)", [-r for r in t_rep], indent=2)
-        dsr("Interest Charge", [-i for i in t_int], indent=2)
+        dsr("Interest — Cash Pay", [-i for i in t_int_cash], indent=2)
+        dsr("Interest — PIK / Accrued", [-i for i in t_int_pik], indent=2)
         dsst("Closing Balance", t_cl)
         dssp()
 
