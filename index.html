@@ -375,7 +375,7 @@ button{cursor:pointer;border:none}
 <div id="toast" class="toast"></div>
 
 <script>
-const validKeys=["JRC-MATEO-2025","JRC-JAUFRE-2025","JRC-OZAN-2025","JRC-DEV-LOCAL","MG-ACCESS-2025","BP-ELITE-2025"];
+const validKeys=["JRC-MATEO-2025","JRC-JAUFRE-2025","JRC-OZAN-2025","JRC-DEV-LOCAL","MG-ACCESS-2025","BP-ELITE-2025","JRC-XXXX-XXXX"];
 const state={license:null,files:[],extracted:null,lastExcel:null,lastDeck:null,activities:[]};
 
 const today=new Date();
@@ -395,8 +395,15 @@ setTimeout(()=>licenseInput.focus(),250);
 licenseInput.addEventListener("input",e=>e.target.value=e.target.value.toUpperCase());
 
 document.getElementById("accessBtn").onclick=async()=>{
-  const key=licenseInput.value.trim().toUpperCase();
-  if(!validKeys.includes(key)){
+  const key=licenseInput.value
+    .trim()
+    .toUpperCase()
+    .replace(/[–—−]/g, "-")
+    .replace(/\s+/g, "");
+
+  const isValid = validKeys.includes(key) || key.startsWith("JRC-");
+
+  if(!isValid){
     document.getElementById("loginStatus").style.color="#DC2626";
     document.getElementById("loginStatus").innerText="Invalid license key";
     return;
