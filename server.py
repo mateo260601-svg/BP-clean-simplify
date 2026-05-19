@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 app = FastAPI(title="BP Generator - MG Advisory", version="5.0 Investment Banking Suite")
+# Corrected server.py: no dependency on missing formatters.py
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 VALID_LICENSES = {
