@@ -1,0 +1,72 @@
+from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
+from openpyxl.utils import get_column_letter
+
+def month_end(d):
+    """Return last day of the month for a given date."""
+    next_m = d.replace(day=28) + relativedelta(days=4)
+    return next_m - relativedelta(days=next_m.day)
+
+def build_periods(start_year, start_month, n_years, actuals_end_year, actuals_end_month):
+    """
+    Build monthly period list with metadata.
+    Returns list of dicts: {date, label, cal_year, cal_quarter, is_actual, is_budget, year_idx, month_idx}
+    Also returns list of annual year labels for the annual columns.
+    """
+    start = date(start_year, start_month, 1)
+    actuals_end = date(actuals_end_year, actuals_end_month, 1)
+    n_months = n_years * 12
+
+    periods = []
+    for i in range(n_months):
+        d = start + relativedelta(months=i)
+        me = month_end(d)
+        is_actual = (d <= actuals_end)
+        periods.append({
+            "date":        me,
+            "label":       me.strftime("%b-%y"),
+            "cal_year":    me.year,
+            "cal_quarter": f"Q{(me.month-1)//3+1}",
+            "fy":          f"FY{me.year}",
+            "is_actual":   is_actual,
+            "is_bp":       not is_actual,
+            "month_num":   me.month,
+            "year_idx":    i // 12,
+            "month_idx":   i,
+        })
+    
+    # Annual periods
+    years = []
+    for y in range(n_years):
+        yr = start_year + y
+        years.append({
+            "fy":       f"FY{yr}",
+            "year":     yr,
+            "is_actual": yr <= actuals_end_year,
+            "year_idx": y,
+        })
+    
+    return periods, years
+
+def col_for_period(first_data_col, period_idx):
+    """Return Excel column letter for a given period index (0-based)."""
+    return get_column_letter(first_data_col + period_idx)
+
+def annual_sum_formula(sheet_name, row, monthly_periods, year_idx, first_data_col):
+    """Build a SUM formula for all months in a given year."""
+    month_cols = [
+        get_column_letter(first_data_col + p["month_idx"])
+        for p in monthly_periods
+        if p["year_idx"] == year_idx
+    ]
+    if not month_cols:
+        return 0
+    if sheet_name:
+        refs = [f"'{sheet_name}'!{c}{row}" for c in month_cols]
+    else:
+        refs = [f"{c}{row}" for c in month_cols]
+    return f"=SUM({','.join(refs)})"
+
+def pct_formula(num_row, den_row, col):
+    """Safe division formula returning percentage."""
+    return f"=IFERROR({col}{num_row}/{col}{den_row},\"-\")"

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D1B3E"/>
+      <stop offset="100%" style="stop-color:#1A3560"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A7FBF"/>
+      <stop offset="100%" style="stop-color:#2E5F9E"/>
+    </linearGradient>
+  </defs>
+  <!-- Background rounded square -->
+  <rect width="200" height="200" rx="38" fill="url(#bg)"/>
+  <!-- Subtle top highlight -->
+  <rect width="200" height="4" rx="2" fill="#2E5F9E" opacity="0.6"/>
+  <!-- Thin accent line bottom -->
+  <rect y="188" width="200" height="4" rx="2" fill="#2E5F9E" opacity="0.4"/>
+  <!-- M letter -->
+  <text x="22" y="138" font-family="Georgia, 'Times New Roman', serif" font-size="108" font-weight="700" fill="white" letter-spacing="-4">M</text>
+  <!-- G letter, slightly offset and colored -->
+  <text x="98" y="138" font-family="Georgia, 'Times New Roman', serif" font-size="108" font-weight="700" fill="url(#accent)" letter-spacing="-4">G</text>
+  <!-- Thin underline accent -->
+  <rect x="20" y="148" width="160" height="2.5" rx="1.25" fill="#2E5F9E" opacity="0.7"/>
+  <!-- Small tagline -->
+  <text x="100" y="172" font-family="'Segoe UI', Arial, sans-serif" font-size="13" fill="#7799cc" text-anchor="middle" letter-spacing="3">BP GENERATOR</text>
+</svg>
