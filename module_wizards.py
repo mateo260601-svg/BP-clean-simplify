@@ -1,192 +1,180 @@
 from typing import Dict, Any, List
-from copy import deepcopy
-from module_wizards import DEFAULT_INSTITUTIONAL_INTAKE
 
-def _float(v, default=0.0):
-    try:
-        if v in [None, ""]:
-            return default
-        if isinstance(v, str):
-            v = v.replace("%", "").replace(",", ".").replace(" ", "")
-        return float(v)
-    except Exception:
-        return default
+BP_WIZARD_SECTIONS = [
+    {
+        "id": "company",
+        "title": "1. Company & Transaction Context",
+        "duration_min": 10,
+        "fields": [
+            "company_name", "sector", "currency", "country", "deal_type",
+            "transaction_rationale", "ownership", "management_team",
+            "business_description", "investment_thesis"
+        ],
+    },
+    {
+        "id": "historical_financials",
+        "title": "2. Historical Financials",
+        "duration_min": 15,
+        "fields": [
+            "historical_revenue", "historical_gross_profit", "historical_ebitda",
+            "historical_ebit", "historical_net_income", "historical_cash",
+            "historical_debt", "historical_capex", "audit_adjustments",
+            "normalisations"
+        ],
+    },
+    {
+        "id": "revenue_build",
+        "title": "3. Revenue Build-Up",
+        "duration_min": 20,
+        "fields": [
+            "revenue_streams", "volume_assumptions", "price_assumptions",
+            "mix_effect", "customer_retention", "churn", "new_business_pipeline",
+            "contracted_revenue", "recurring_revenue", "cyclicality", "seasonality"
+        ],
+    },
+    {
+        "id": "operations",
+        "title": "4. Operations & Capacity",
+        "duration_min": 15,
+        "fields": [
+            "capacity", "utilisation", "production_sites", "fte",
+            "productivity", "fixed_cost_base", "variable_cost_base",
+            "operating_leverage"
+        ],
+    },
+    {
+        "id": "gross_margin",
+        "title": "5. Gross Margin & COGS",
+        "duration_min": 15,
+        "fields": [
+            "raw_materials", "direct_labor", "freight", "energy",
+            "supplier_terms", "procurement_savings", "price_cost_lag",
+            "gross_margin_target"
+        ],
+    },
+    {
+        "id": "opex",
+        "title": "6. SG&A / Opex",
+        "duration_min": 15,
+        "fields": [
+            "sales_marketing", "general_admin", "rd", "rent", "it_costs",
+            "insurance", "professional_fees", "management_costs", "cost_savings"
+        ],
+    },
+    {
+        "id": "working_capital",
+        "title": "7. Working Capital",
+        "duration_min": 15,
+        "fields": [
+            "dso", "dio", "dpo", "inventory_policy", "customer_payment_terms",
+            "supplier_payment_terms", "seasonality", "factoring",
+            "working_capital_normalisation"
+        ],
+    },
+    {
+        "id": "capex",
+        "title": "8. Capex & Asset Base",
+        "duration_min": 15,
+        "fields": [
+            "maintenance_capex", "growth_capex", "expansion_projects",
+            "useful_life", "opening_ppe", "depreciation_policy",
+            "asset_replacement_cycle"
+        ],
+    },
+    {
+        "id": "debt",
+        "title": "9. Debt & Financing",
+        "duration_min": 15,
+        "fields": [
+            "opening_debt", "interest_rate", "amortisation", "cash_sweep",
+            "covenants", "leases", "debt_like_items", "refinancing_assumptions"
+        ],
+    },
+    {
+        "id": "tax",
+        "title": "10. Tax & Legal",
+        "duration_min": 10,
+        "fields": [
+            "tax_rate", "nols", "cash_tax", "deferred_tax",
+            "legal_claims", "contingent_liabilities"
+        ],
+    },
+    {
+        "id": "scenarios",
+        "title": "11. Scenarios & Sensitivities",
+        "duration_min": 20,
+        "fields": [
+            "base_case", "downside_case", "upside_case", "price_sensitivity",
+            "volume_sensitivity", "margin_sensitivity", "covenant_sensitivity"
+        ],
+    },
+    {
+        "id": "outputs",
+        "title": "12. Outputs & Review",
+        "duration_min": 15,
+        "fields": [
+            "management_case_review", "bank_case_review", "ic_case_review",
+            "key_diligence_questions", "investment_committee_messages"
+        ],
+    },
+]
 
-def _pct(v, default=0.0):
-    n = _float(v, default)
-    return n / 100 if n > 1 else n
+MODULE_SETUP_TIMES = {
+    "bp": {"v1_hours": 1, "institutional_hours": "2-6"},
+    "im_deck": {"v1_hours": "1-2", "institutional_hours": "4-12"},
+    "qoe": {"v1_hours": "1-3", "institutional_hours": "1-3 days"},
+    "restructuring": {"v1_hours": "2-4", "institutional_hours": "1-2 days"},
+}
 
-def clean_intake(intake: Dict[str, Any]) -> Dict[str, Any]:
-    x = deepcopy(DEFAULT_INSTITUTIONAL_INTAKE)
-    x.update(intake or {})
-    pct_fields = [
-        "revenue_growth", "contracted_revenue_pct", "volume_growth", "price_growth", "churn",
-        "new_business_growth", "gross_margin", "raw_material_pct_sales", "direct_labor_pct_sales",
-        "freight_pct_sales", "energy_pct_sales", "ebitda_margin", "sgna_pct_sales",
-        "variable_opex_pct_sales", "interest_rate", "tax_rate", "utilisation"
-    ]
-    for f in pct_fields:
-        x[f] = _pct(x.get(f), DEFAULT_INSTITUTIONAL_INTAKE.get(f, 0.0))
-    numeric_fields = [
-        "revenue", "cash", "debt", "dso", "dio", "dpo", "maintenance_capex", "growth_capex",
-        "opening_ppe", "useful_life", "capacity", "fte", "fixed_costs", "start_year",
-        "forecast_years", "historical_years"
-    ]
-    for f in numeric_fields:
-        x[f] = _float(x.get(f), DEFAULT_INSTITUTIONAL_INTAKE.get(f, 0.0))
-    x["forecast_years"] = int(x["forecast_years"])
-    x["historical_years"] = int(x["historical_years"])
-    x["start_year"] = int(x["start_year"])
-    return x
+DEFAULT_INSTITUTIONAL_INTAKE = {
+    "company_name": "Target Company",
+    "sector": "Industrial / Manufacturing",
+    "currency": "EUR",
+    "country": "France",
+    "deal_type": "M&A",
+    "start_year": 2026,
+    "forecast_years": 5,
+    "historical_years": 3,
 
-def build_projection(intake: Dict[str, Any]) -> Dict[str, Any]:
-    x = clean_intake(intake)
-    years = [x["start_year"] + i for i in range(x["forecast_years"])]
-    rows = []
-    revenue = x["revenue"]
-    debt = x["debt"]
-    cash = x["cash"]
-    opening_ppe = x["opening_ppe"]
+    "revenue": 202000,
+    "revenue_growth": 0.073,
+    "contracted_revenue_pct": 0.34,
+    "volume_growth": 0.05,
+    "price_growth": 0.02,
+    "churn": 0.03,
+    "new_business_growth": 0.06,
 
-    for i, year in enumerate(years):
-        if i > 0:
-            revenue *= (1 + x["revenue_growth"])
-        volume_growth = x["volume_growth"]
-        price_growth = x["price_growth"]
-        contracted_revenue = revenue * x["contracted_revenue_pct"]
-        new_business = revenue * x["new_business_growth"]
-        churn_impact = revenue * x["churn"]
+    "gross_margin": 0.391,
+    "raw_material_pct_sales": 0.45,
+    "direct_labor_pct_sales": 0.08,
+    "freight_pct_sales": 0.03,
+    "energy_pct_sales": 0.025,
 
-        gross_profit = revenue * x["gross_margin"]
-        raw_materials = revenue * x["raw_material_pct_sales"]
-        direct_labor = revenue * x["direct_labor_pct_sales"]
-        freight = revenue * x["freight_pct_sales"]
-        energy = revenue * x["energy_pct_sales"]
-        sgna = revenue * x["sgna_pct_sales"]
-        variable_opex = revenue * x["variable_opex_pct_sales"]
-        ebitda = revenue * x["ebitda_margin"]
-        depreciation = opening_ppe / max(x["useful_life"], 1)
-        ebit = ebitda - depreciation
-        interest = debt * x["interest_rate"]
-        pbt = ebit - interest
-        tax = max(pbt, 0) * x["tax_rate"]
-        net_income = pbt - tax
+    "ebitda_margin": 0.229,
+    "sgna_pct_sales": 0.11,
+    "fixed_costs": 18000,
+    "variable_opex_pct_sales": 0.06,
 
-        receivables = revenue * x["dso"] / 365
-        inventory = revenue * x["dio"] / 365
-        payables = revenue * x["dpo"] / 365
-        nwc = receivables + inventory - payables
-        capex = x["maintenance_capex"] + x["growth_capex"]
-        fcf = ebitda - tax - capex - (nwc * 0.05)
-        cash += fcf
-        debt = max(0, debt - max(fcf * 0.5, 0))
-        net_debt = debt - cash
-        utilisation = min(1.0, x["utilisation"] + i * 0.05)
-        capacity_used = x["capacity"] * utilisation
+    "cash": 18700,
+    "debt": 201000,
+    "interest_rate": 0.075,
+    "tax_rate": 0.25,
 
-        rows.append({
-            "year": year,
-            "revenue": revenue,
-            "contracted_revenue": contracted_revenue,
-            "new_business": new_business,
-            "churn_impact": churn_impact,
-            "volume_growth": volume_growth,
-            "price_growth": price_growth,
-            "gross_profit": gross_profit,
-            "raw_materials": raw_materials,
-            "direct_labor": direct_labor,
-            "freight": freight,
-            "energy": energy,
-            "sgna": sgna,
-            "variable_opex": variable_opex,
-            "ebitda": ebitda,
-            "depreciation": depreciation,
-            "ebit": ebit,
-            "interest": interest,
-            "pbt": pbt,
-            "tax": tax,
-            "net_income": net_income,
-            "receivables": receivables,
-            "inventory": inventory,
-            "payables": payables,
-            "nwc": nwc,
-            "capex": capex,
-            "fcf": fcf,
-            "cash": cash,
-            "debt": debt,
-            "net_debt": net_debt,
-            "net_debt_ebitda": net_debt / ebitda if ebitda else None,
-            "ebitda_margin": ebitda / revenue if revenue else None,
-            "fcf_conversion": fcf / ebitda if ebitda else None,
-            "utilisation": utilisation,
-            "capacity_used": capacity_used,
-            "fte": x["fte"],
-            "revenue_per_fte": revenue / x["fte"] if x["fte"] else None,
-        })
+    "dso": 55,
+    "dio": 40,
+    "dpo": 55,
 
-    return {"intake": x, "projection": rows}
+    "maintenance_capex": 11500,
+    "growth_capex": 0,
+    "opening_ppe": 85000,
+    "useful_life": 20,
 
-def build_scenarios(intake: Dict[str, Any]) -> Dict[str, Any]:
-    base = clean_intake(intake)
-    cases = {}
-    for name, rev_delta, margin_delta in [
-        ("Downside", -0.04, -0.03),
-        ("Base", 0.0, 0.0),
-        ("Upside", 0.04, 0.03),
-    ]:
-        c = deepcopy(base)
-        c["revenue_growth"] = max(-0.20, c["revenue_growth"] + rev_delta)
-        c["ebitda_margin"] = max(0.0, c["ebitda_margin"] + margin_delta)
-        cases[name] = build_projection(c)
-    return cases
+    "capacity": 432000,
+    "utilisation": 0.51,
+    "fte": 86,
 
-def to_legacy_build_config(intake: Dict[str, Any]) -> Dict[str, Any]:
-    x = clean_intake(intake)
-    return {
-        "company_name": x["company_name"],
-        "currency": x["currency"],
-        "business_type": "industrial",
-        "sector": x["sector"],
-        "scenarios": "all",
-        "n_years": x["forecast_years"],
-        "start_year": x["start_year"],
-        "actuals_months": 0,
-        "opening_cash": x["cash"],
-        "base_revenue": x["revenue"],
-        "revenue_growth": x["revenue_growth"],
-        "gross_margin": x["gross_margin"],
-        "ebitda_margin": x["ebitda_margin"],
-        "dso": x["dso"],
-        "dio": x["dio"],
-        "dio_rm": max(0, x["dio"] - 10),
-        "dpo": x["dpo"],
-        "tax_rate": x["tax_rate"],
-        "inflation": 0.025,
-        "price_per_mt": 2000,
-        "capacity_mt": x["capacity"],
-        "capex": {
-            "opening_ppe": x["opening_ppe"],
-            "maint_capex": x["maintenance_capex"],
-            "expan_capex": x["growth_capex"],
-            "useful_life": int(x["useful_life"]),
-        },
-        "debt": {
-            "total_debt": x["debt"],
-            "interest_rate": x["interest_rate"],
-            "tranches": [{
-                "name": "Senior Debt",
-                "type": "Term Loan",
-                "amount": x["debt"],
-                "rate": x["interest_rate"],
-                "tenor": x["forecast_years"],
-                "amortization": "cash_sweep"
-            }]
-        },
-        "client_setup": {
-            "investment_thesis": x.get("investment_thesis", ""),
-            "value_creation_plan": x.get("value_creation_plan", ""),
-            "key_risks": x.get("key_risks", ""),
-            "diligence_questions": x.get("diligence_questions", ""),
-            "raw_intake": x
-        }
-    }
+    "investment_thesis": "",
+    "value_creation_plan": "",
+    "key_risks": "",
+    "diligence_questions": "",
+}
