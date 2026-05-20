@@ -3,371 +3,108 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>MG Advisory | Investment Banking Suite</title>
+<title>MG Advisory | Institutional Banking SaaS</title>
 <style>
-:root{
-  --navy:#061A3A;
-  --navy-2:#08244F;
-  --blue:#0B5FFF;
-  --blue-2:#EAF2FF;
-  --ink:#0B1533;
-  --muted:#64748B;
-  --line:#E2E8F0;
-  --bg:#F7FAFC;
-  --card:#FFFFFF;
-  --green:#059669;
-  --red:#DC2626;
-  --orange:#EA580C;
-  --purple:#7C3AED;
-}
+:root{--navy:#061A3A;--blue:#0B5FFF;--blue2:#EAF2FF;--ink:#0B1533;--muted:#64748B;--line:#E2E8F0;--bg:#F7FAFC;--green:#059669;--red:#DC2626;--orange:#EA580C;--purple:#7C3AED}
 *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-body{background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
-button,input,select{font:inherit}
-button{cursor:pointer;border:none}
-.hidden{display:none!important}
-
-/* Login */
-.login-bg{
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 85% 10%,rgba(11,95,255,.18),transparent 28%),
-    radial-gradient(circle at 15% 85%,rgba(6,26,58,.18),transparent 30%),
-    linear-gradient(135deg,#F8FBFF 0%,#EEF5FF 48%,#FFFFFF 100%);
-  display:flex;align-items:center;justify-content:center;padding:28px;
-}
-.login-card{
-  width:100%;max-width:540px;background:rgba(255,255,255,.88);
-  border:1px solid rgba(148,163,184,.28);border-radius:28px;padding:42px;
-  box-shadow:0 30px 80px rgba(15,23,42,.12);backdrop-filter:blur(18px)
-}
-.login-mark{display:flex;align-items:center;gap:14px;margin-bottom:28px}
-.logo-box{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:24px}
-.login-title{font-size:34px;line-height:1.1;font-weight:900;letter-spacing:-.04em;margin-bottom:12px}
-.login-sub{color:var(--muted);font-size:16px;line-height:1.55;margin-bottom:26px}
-.field-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:#334155;margin-bottom:8px}
-.license-input{width:100%;border:1px solid #CBD5E1;background:#fff;color:var(--ink);padding:16px 18px;border-radius:14px;outline:none;font-weight:700}
-.license-input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(11,95,255,.12)}
-.primary-btn{width:100%;background:linear-gradient(135deg,var(--blue),#174EA6);color:#fff;border-radius:14px;padding:16px 18px;font-weight:900;margin-top:14px;box-shadow:0 14px 26px rgba(11,95,255,.18)}
-.status{font-size:14px;margin-top:16px;color:var(--green);min-height:21px}
-.login-foot{font-size:12px;color:#94A3B8;text-align:center;margin-top:26px}
-
-/* App Layout */
-.app{display:grid;grid-template-columns:284px 1fr;min-height:100vh}
-.sidebar{background:linear-gradient(180deg,var(--navy) 0%,#03112A 100%);color:#fff;padding:24px 18px;position:sticky;top:0;height:100vh}
-.brand{display:flex;align-items:center;gap:12px;margin-bottom:28px;padding:0 4px}
-.brand-logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#F8FAFC,#9DBDFF);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:1000;font-size:22px}
-.brand-name{font-weight:900;font-size:19px;letter-spacing:-.02em}
-.brand-sub{font-size:12px;color:#AFC4E8;margin-top:3px}
-.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:#6EE7B7;padding:6px 10px;font-size:11px;font-weight:900;margin:0 4px 24px}
-.nav button{width:100%;display:flex;align-items:center;gap:12px;background:transparent;color:#DBEAFE;text-align:left;padding:13px 14px;border-radius:13px;margin-bottom:7px;font-weight:750}
-.nav button:hover,.nav button.active{background:rgba(59,130,246,.22);color:#fff}
-.nav .ico{width:22px;text-align:center;opacity:.95}
-.side-card{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);border-radius:18px;padding:16px;margin-top:24px}
-.side-card-title{font-size:13px;font-weight:900;margin-bottom:12px}
-.side-line{display:flex;align-items:center;gap:8px;color:#AFC4E8;font-size:12px;margin-top:8px}
-
-.main{padding:24px 28px 34px;min-width:0}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}
-.page-title{font-size:30px;font-weight:950;letter-spacing:-.04em}
-.search-wrap{display:flex;align-items:center;gap:12px}
-.search{width:320px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;color:var(--ink)}
-.quick{background:var(--navy);color:#fff;border-radius:14px;padding:12px 16px;font-weight:900}
-.date-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 14px;color:#334155;font-weight:800;font-size:13px}
-
-/* Cards */
-.hero{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;margin-bottom:18px;box-shadow:0 16px 40px rgba(15,23,42,.05)}
-.hero-row{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px}
-.hero h2{font-size:20px;font-weight:950;letter-spacing:-.02em}
-.hero p{color:var(--muted);font-size:14px;margin-top:6px}
-.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.kpi{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#fff,#FBFDFF);padding:18px;position:relative;overflow:hidden}
-.kpi::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:var(--blue-2)}
-.kpi-top{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
-.kpi-ico{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900}
-.kpi-label{color:#475569;font-size:13px;font-weight:750}
-.kpi-value{font-size:28px;font-weight:950;margin-top:10px;position:relative;z-index:1}
-.kpi-change{font-size:12px;font-weight:800;margin-top:6px;position:relative;z-index:1}
-.green{color:var(--green)}.red{color:var(--red)}.orange{color:var(--orange)}.purple{color:var(--purple)}.blue{color:var(--blue)}
-.bg-blue{background:#EAF2FF;color:var(--blue)}.bg-green{background:#EAFBF4;color:var(--green)}.bg-orange{background:#FFF3E8;color:var(--orange)}.bg-purple{background:#F4ECFF;color:var(--purple)}
-
-.module{display:none}
-.module.active{display:block}
-.panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 14px 36px rgba(15,23,42,.04);margin-bottom:18px}
-.panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
-.panel-title{display:flex;align-items:center;gap:12px}
-.panel-title h2{font-size:20px;font-weight:950;letter-spacing:-.02em}
-.panel-title p{font-size:14px;color:var(--muted);margin-top:4px}
-.small-btn{background:#fff;border:1px solid var(--line);color:var(--blue);border-radius:12px;padding:10px 13px;font-weight:850}
-.tabs{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;border:1px solid var(--line);border-radius:16px;padding:8px;margin-bottom:14px}
-.tab{padding:12px;border-radius:12px;text-align:center;font-size:12px;font-weight:900;color:#334155;background:#fff}
-.tab.active{background:var(--blue-2);color:var(--blue)}
-.work-grid{display:grid;grid-template-columns:1fr 1fr .9fr;gap:14px}
-.drop{border:1.8px dashed #CBD5E1;background:#FBFDFF;border-radius:18px;padding:28px;text-align:center;min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.drop.drag{background:#EFF6FF;border-color:var(--blue)}
-.drop-ico{font-size:42px;color:var(--blue);margin-bottom:10px}
-.drop strong{font-size:16px}
-.drop span{color:var(--muted);font-size:13px;margin-top:6px}
-.file-input{display:none}
-.select-btn{background:var(--blue);color:#fff;border-radius:12px;padding:13px 18px;font-weight:900;margin-top:18px}
-.action-stack{display:flex;flex-direction:column;gap:12px}
-.big-action{background:linear-gradient(135deg,var(--blue),#174EA6);color:#fff;border-radius:14px;padding:15px 18px;font-weight:950}
-.outline-action{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:15px 18px;font-weight:900}
-.activity{list-style:none;display:flex;flex-direction:column;gap:12px}
-.activity li{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #F1F5F9;padding-bottom:12px}
-.activity li:last-child{border-bottom:none;padding-bottom:0}
-.check{width:28px;height:28px;border-radius:50%;background:#DCFCE7;color:var(--green);display:flex;align-items:center;justify-content:center;font-weight:1000}
-.act-text{flex:1}
-.act-text strong{font-size:13px}
-.act-text span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
-.file-tag{font-size:11px;font-weight:900;border-radius:9px;padding:7px 8px;background:#EAF2FF;color:var(--blue)}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{padding:12px;border-bottom:1px solid #EEF2F7;text-align:left;font-size:13px}
-.table th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#64748B}
-.table td{color:#334155}
-.toast{position:fixed;right:24px;bottom:24px;z-index:99;background:var(--navy);color:#fff;padding:14px 16px;border-radius:14px;box-shadow:0 18px 40px rgba(2,6,23,.25);max-width:420px;display:none}
-.toast.show{display:block;animation:slideUp .25s ease}
-.progress{height:8px;background:#E2E8F0;border-radius:999px;overflow:hidden;margin-top:14px}
-.progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--blue),#60A5FA);transition:.35s}
-@keyframes slideUp{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
-@media(max-width:1150px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.work-grid,.two-col{grid-template-columns:1fr}.tabs{grid-template-columns:repeat(4,1fr)}.search{display:none}}
-@media(max-width:820px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.topbar{flex-direction:column;align-items:flex-start}.kpi-grid{grid-template-columns:1fr}}
+body{background:var(--bg);color:var(--ink);min-height:100vh}button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.hidden{display:none!important}
+.login{min-height:100vh;background:radial-gradient(circle at 85% 10%,rgba(11,95,255,.2),transparent 30%),linear-gradient(135deg,#F8FBFF,#EEF5FF 45%,#fff);display:flex;align-items:center;justify-content:center;padding:28px}.login-card{width:100%;max-width:580px;background:rgba(255,255,255,.9);border:1px solid rgba(148,163,184,.28);border-radius:28px;padding:42px;box-shadow:0 30px 80px rgba(15,23,42,.12);backdrop-filter:blur(18px)}.mark{display:flex;align-items:center;gap:14px;margin-bottom:26px}.logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:950;font-size:23px}.title{font-size:34px;line-height:1.1;font-weight:950;letter-spacing:-.04em;margin-bottom:12px}.sub{color:var(--muted);font-size:16px;line-height:1.55;margin-bottom:26px}.label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:#334155;margin-bottom:8px}.input{width:100%;border:1px solid #CBD5E1;background:#fff;color:var(--ink);padding:13px 15px;border-radius:13px;outline:none;font-weight:700}.primary{background:linear-gradient(135deg,var(--blue),#174EA6);color:#fff;border-radius:14px;padding:13px 17px;font-weight:900}.full{width:100%;margin-top:14px}.status{font-size:14px;margin-top:14px;color:var(--green);min-height:20px}
+.app{display:grid;grid-template-columns:290px 1fr;min-height:100vh}.sidebar{background:linear-gradient(180deg,var(--navy),#03112A);color:#fff;padding:24px 18px;position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}.brand-logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#fff,#AFC8FF);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:950;font-size:22px}.brand-name{font-weight:950;font-size:19px}.brand-sub{font-size:12px;color:#AFC4E8}.live{display:inline-flex;border-radius:999px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:#6EE7B7;padding:6px 10px;font-size:11px;font-weight:900;margin-bottom:24px}.nav button{width:100%;display:flex;align-items:center;gap:12px;background:transparent;color:#DBEAFE;text-align:left;padding:13px 14px;border-radius:13px;margin-bottom:7px;font-weight:780}.nav button.active,.nav button:hover{background:rgba(59,130,246,.24);color:#fff}.side-card{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);border-radius:18px;padding:16px;margin-top:22px}.side-line{font-size:12px;color:#AFC4E8;margin-top:8px}
+.main{padding:24px 28px 36px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;gap:16px}.page-title{font-size:31px;font-weight:950;letter-spacing:-.04em}.top-actions{display:flex;gap:10px;align-items:center}.search{width:300px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 14px}.date{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-weight:800;color:#334155;font-size:13px}.module{display:none}.module.active{display:block}
+.panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;margin-bottom:18px;box-shadow:0 14px 36px rgba(15,23,42,.04)}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}.panel h2{font-size:21px;font-weight:950}.panel p{color:var(--muted);font-size:14px;line-height:1.5;margin-top:5px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.kpi{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#fff,#FBFDFF);padding:18px}.kpi-label{font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:.08em;font-weight:900}.kpi-val{font-size:30px;font-weight:950;margin-top:8px}.up{color:var(--green);font-size:12px;font-weight:800;margin-top:6px}
+.card-action{border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff;transition:.18s;text-align:left}.card-action:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(15,23,42,.08)}.card-action strong{display:block;font-size:16px;margin-bottom:6px}.card-action span{color:var(--muted);font-size:13px}.small{background:#fff;border:1px solid var(--line);color:var(--blue);border-radius:12px;padding:10px 13px;font-weight:850}.dark{background:var(--navy);color:#fff;border-radius:12px;padding:11px 14px;font-weight:900}.mutedbtn{background:#F1F5F9;color:#0F172A;border-radius:12px;padding:11px 14px;font-weight:850}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:12px;border-bottom:1px solid #EEF2F7;text-align:left;font-size:13px}.table th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#64748B}.drop{border:1.8px dashed #CBD5E1;background:#FBFDFF;border-radius:18px;padding:28px;text-align:center;min-height:210px;display:flex;align-items:center;justify-content:center;flex-direction:column}.drop.drag{background:#EFF6FF;border-color:var(--blue)}.file-input{display:none}.select{background:var(--blue);color:#fff;border-radius:12px;padding:12px 16px;font-weight:900;margin-top:16px}.formgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.field{display:flex;flex-direction:column;gap:7px}.field label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;font-weight:900;color:#475569}.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff}.field textarea{min-height:88px;resize:vertical}.toast{position:fixed;right:24px;bottom:24px;z-index:99;background:var(--navy);color:#fff;padding:14px 16px;border-radius:14px;box-shadow:0 18px 40px rgba(2,6,23,.25);max-width:460px;display:none}.toast.show{display:block}.project-list{display:grid;gap:10px}.project-row{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}.project-row.active{border-color:var(--blue);box-shadow:0 0 0 4px rgba(11,95,255,.08)}.section-title{grid-column:1/-1;background:#F8FAFC;border:1px solid var(--line);border-radius:14px;padding:12px;font-weight:950;color:var(--navy)}
+@media(max-width:1200px){.grid4,.grid3,.grid2,.formgrid{grid-template-columns:1fr 1fr}.search{display:none}}@media(max-width:820px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.grid4,.grid3,.grid2,.formgrid{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
-
-<section id="login" class="login-bg">
+<section id="login" class="login">
   <div class="login-card">
-    <div class="login-mark">
-      <div class="logo-box">MG</div>
-      <div>
-        <div style="font-weight:950;font-size:18px">MG Advisory</div>
-        <div style="color:#64748B;font-size:13px">Elite Investment Banking Suite</div>
-      </div>
-    </div>
-    <h1 class="login-title">BP Investment Banking Suite</h1>
-    <div class="login-sub">Générez automatiquement des modèles Excel, dashboards financiers, QoE packs et decks IM à partir de comptes audités PDF ou management accounts Excel.</div>
-    <div class="field-label">License key</div>
-    <input id="licenseInput" class="license-input" type="text" placeholder="JRC-MATEO-2025" autocomplete="off">
-    <button id="accessBtn" class="primary-btn">Access Platform</button>
+    <div class="mark"><div class="logo">MG</div><div><div style="font-weight:950;font-size:18px">MG Advisory</div><div style="color:#64748B;font-size:13px">Institutional Banking SaaS</div></div></div>
+    <h1 class="title">Elite Deal Workspace</h1>
+    <div class="sub">Projects, BP, QoE, Restructuring and IM deck generation. Designed for 1–2h module setup and institutional-grade outputs.</div>
+    <div class="label">License key</div>
+    <input id="licenseInput" class="input" placeholder="JRC-MATEO-2025" autocomplete="off">
+    <button class="primary full" onclick="login()">Access Platform</button>
     <div id="loginStatus" class="status">System ready</div>
-    <div class="login-foot">Private & Confidential • MG Advisory Technology</div>
   </div>
 </section>
 
 <section id="app" class="app hidden">
   <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-logo">M</div>
-      <div>
-        <div class="brand-name">MG Advisory</div>
-        <div class="brand-sub">Investment Banking Suite</div>
-      </div>
-    </div>
-    <div class="pill">● LIVE • ELITE V3</div>
+    <div class="brand"><div class="brand-logo">M</div><div><div class="brand-name">MG Advisory</div><div class="brand-sub">Institutional SaaS V5</div></div></div>
+    <div class="live">● LIVE • V5</div>
     <nav class="nav">
-      <button class="active" data-module="dashboard"><span class="ico">⌂</span>Dashboard</button>
-      <button data-module="upload"><span class="ico">⇧</span>Upload Financials</button>
-      <button data-module="excel"><span class="ico">▦</span>Excel Model</button>
-      <button data-module="deck"><span class="ico">▣</span>IM Deck Generator</button>
-      <button data-module="qoe"><span class="ico">⌁</span>QoE Analysis</button>
-      <button data-module="restructuring"><span class="ico">⌬</span>Restructuring</button>
-      <button data-module="investors"><span class="ico">◫</span>Investors Report</button>
-      <button data-module="settings"><span class="ico">⚙</span>Settings</button>
+      <button class="active" data-module="dashboard">⌂ Dashboard</button>
+      <button data-module="projects">◫ Projects</button>
+      <button data-module="upload">⇧ Data Room</button>
+      <button data-module="bp">▦ BP Wizard</button>
+      <button data-module="deck">▣ IM Deck</button>
+      <button data-module="qoe">⌁ QoE</button>
+      <button data-module="restructuring">⌬ Restructuring</button>
+      <button data-module="settings">⚙ Settings</button>
     </nav>
     <div class="side-card">
-      <div class="side-card-title">Platform Status</div>
-      <div class="side-line"><span style="color:#6EE7B7">●</span> All systems operational</div>
-      <div class="side-line">Last update <span id="sideDate"></span></div>
+      <div style="font-weight:900;margin-bottom:10px">Current Project</div>
+      <div class="side-line" id="currentProjectSide">No project selected</div>
+      <div class="side-line">Status: operational</div>
     </div>
   </aside>
 
   <main class="main">
     <div class="topbar">
       <h1 id="pageTitle" class="page-title">Dashboard</h1>
-      <div class="search-wrap">
-        <input class="search" placeholder="Search anything...">
-        <div class="date-card" id="today"></div>
-        <button class="quick" onclick="openModule('upload')">Quick Actions ▾</button>
-      </div>
+      <div class="top-actions"><input class="search" placeholder="Search projects..."><div class="date" id="today"></div><button class="dark" onclick="openModule('projects')">New Project</button></div>
     </div>
 
     <div id="dashboard" class="module active">
-      <section class="hero">
-        <div class="hero-row">
-          <div>
-            <h2>Welcome back, MG Advisory 👋</h2>
-            <p>Voici le cockpit de génération financière : extraction, modèle Excel, IM deck, QoE, restructuring et investor reporting.</p>
-          </div>
-          <button class="small-btn" onclick="openModule('upload')">Start new project</button>
-        </div>
-        <div class="kpi-grid">
-          <div class="kpi"><div class="kpi-top"><div class="kpi-ico bg-blue">▤</div><div class="kpi-label">Models Generated</div></div><div class="kpi-value">24</div><div class="kpi-change green">↑ 12.5% vs last 7 days</div></div>
-          <div class="kpi"><div class="kpi-top"><div class="kpi-ico bg-purple">▣</div><div class="kpi-label">Decks Created</div></div><div class="kpi-value">18</div><div class="kpi-change purple">↑ 8.3% vs last 7 days</div></div>
-          <div class="kpi"><div class="kpi-top"><div class="kpi-ico bg-green">↗</div><div class="kpi-label">QoE Analyses</div></div><div class="kpi-value">15</div><div class="kpi-change green">↑ 15.7% vs last 7 days</div></div>
-          <div class="kpi"><div class="kpi-top"><div class="kpi-ico bg-orange">◎</div><div class="kpi-label">Reports Exported</div></div><div class="kpi-value">32</div><div class="kpi-change orange">↑ 9.2% vs last 7 days</div></div>
+      <section class="panel"><div class="panel-head"><div><h2>Institutional Deal Cockpit</h2><p>Un workspace par dossier d'investissement avec BP détaillé, QoE, restructuring et IM deck.</p></div><button class="small" onclick="refreshProjects()">Refresh</button></div>
+        <div class="grid4">
+          <div class="kpi"><div class="kpi-label">Projects</div><div class="kpi-val" id="kpiProjects">0</div><div class="up">Active workspace</div></div>
+          <div class="kpi"><div class="kpi-label">Documents</div><div class="kpi-val" id="kpiDocs">0</div><div class="up">Uploaded</div></div>
+          <div class="kpi"><div class="kpi-label">Outputs</div><div class="kpi-val" id="kpiOutputs">0</div><div class="up">BP / QoE / Deck</div></div>
+          <div class="kpi"><div class="kpi-label">Setup</div><div class="kpi-val">1–6h</div><div class="up">Module depth</div></div>
         </div>
       </section>
+      <section class="panel"><div class="grid4">
+        <button class="card-action" onclick="openModule('projects')"><strong>Create Project</strong><span>Company, sector, deal type</span></button>
+        <button class="card-action" onclick="openModule('upload')"><strong>Upload Financials</strong><span>PDF / Excel / CSV</span></button>
+        <button class="card-action" onclick="openModule('bp')"><strong>BP Wizard</strong><span>12-section detailed setup</span></button>
+        <button class="card-action" onclick="generateAll()"><strong>Generate All</strong><span>BP + QoE + Restructuring + Deck</span></button>
+      </div></section>
+    </div>
 
-      <section class="panel">
-        <div class="panel-head">
-          <div class="panel-title">
-            <div class="kpi-ico bg-blue">▦</div>
-            <div><h2>Deal Workspace</h2><p>Chargez les documents financiers et générez les livrables institutionnels.</p></div>
-          </div>
-          <button class="small-btn" onclick="openModule('excel')">How it works</button>
-        </div>
-        <div class="work-grid">
-          <div class="drop" id="dashboardDrop">
-            <div class="drop-ico">⇧</div>
-            <strong>Drag & drop your files here</strong>
-            <span>PDF audited accounts, XLSX management accounts, CSV</span>
-            <button class="select-btn" onclick="document.getElementById('fileInput').click()">Select Files</button>
-          </div>
-          <div>
-            <h3 style="margin-bottom:10px">Actions</h3>
-            <p style="color:var(--muted);font-size:14px;margin-bottom:14px">Générez un modèle Excel ou un deck IM à partir des fichiers importés.</p>
-            <div class="action-stack">
-              <button class="big-action" onclick="generateExcel()">Generate Excel Model</button>
-              <button class="outline-action" onclick="downloadLatest('excel')">Download Latest Excel</button>
-              <button class="big-action" onclick="generateDeck()">Generate IM Deck</button>
-            </div>
-          </div>
-          <div>
-            <h3 style="margin-bottom:10px">Recent Activity</h3>
-            <ul class="activity" id="activityList"></ul>
-          </div>
+    <div id="projects" class="module">
+      <section class="panel"><div class="panel-head"><div><h2>Projects</h2><p>Crée un projet par société / dossier analysé.</p></div></div>
+        <div class="formgrid">
+          <div class="field"><label>Project name</label><input id="pName" placeholder="JBF Belgium - Investment Review"></div>
+          <div class="field"><label>Company</label><input id="pCompany" placeholder="JBF Global Europe"></div>
+          <div class="field"><label>Sector</label><input id="pSector" placeholder="Industrial / Manufacturing"></div>
+          <div class="field"><label>Currency</label><select id="pCurrency"><option>EUR</option><option>GBP</option><option>USD</option></select></div>
+          <div class="field"><label>Deal type</label><select id="pDealType"><option>M&A</option><option>Restructuring</option><option>Refinancing</option><option>Fundraising</option><option>Strategic review</option></select></div>
+          <div class="field"><label>&nbsp;</label><button class="primary" onclick="createProject()">Create Project</button></div>
         </div>
       </section>
+      <section class="panel"><h2>Existing Projects</h2><div id="projectList" class="project-list" style="margin-top:14px"></div></section>
     </div>
 
     <div id="upload" class="module">
-      <section class="panel">
-        <div class="panel-head">
-          <div class="panel-title"><div class="kpi-ico bg-blue">⇧</div><div><h2>Upload Financials</h2><p>Import PDF, Excel ou CSV. La plateforme extrait les chiffres, puis les normalise.</p></div></div>
-        </div>
-        <div class="two-col">
-          <div class="drop" id="uploadDrop">
-            <div class="drop-ico">⇧</div>
-            <strong>Drop financial files here</strong>
-            <span>Supported: PDF, XLSX, XLS, CSV • max 50MB</span>
-            <button class="select-btn" onclick="document.getElementById('fileInput').click()">Select Files</button>
-          </div>
-          <div class="panel" style="margin:0">
-            <h3>Extraction Status</h3>
-            <p style="color:var(--muted);font-size:14px;margin-top:6px">Aucun fichier importé pour le moment.</p>
-            <div class="progress"><span id="uploadProgress"></span></div>
-            <div class="action-stack" style="margin-top:16px">
-              <button class="big-action" onclick="uploadSelectedFiles()">Start Extraction</button>
-              <button class="outline-action" onclick="openModule('excel')">Go to Excel Model</button>
-            </div>
-          </div>
-        </div>
+      <section class="panel"><div class="panel-head"><div><h2>Data Room Upload</h2><p>Upload audited accounts, management accounts, trial balance, CIM, forecasts or reporting packs.</p></div></div>
+        <div class="grid2"><div class="drop" id="dropZone"><strong>Drag & drop files here</strong><span>PDF, XLSX, XLS, CSV</span><button class="select" onclick="document.getElementById('fileInput').click()">Select Files</button></div><div><h2>Upload status</h2><p id="uploadStatus">Select a project first.</p><br><button class="primary" onclick="uploadFiles()">Start Extraction</button></div></div>
       </section>
     </div>
 
-    <div id="excel" class="module">
-      <section class="panel">
-        <div class="panel-head">
-          <div class="panel-title"><div class="kpi-ico bg-green">▦</div><div><h2>Elite Excel Model</h2><p>Workbook banque d'affaires : Summary, P&L, Balance Sheet, Cash Flow, KPIs, Charts, QoE Adjustments et Raw Data.</p></div></div>
-          <button class="small-btn" onclick="toast('Le modèle utilise /api/generate côté Railway.')">How it works</button>
-        </div>
-        <div class="tabs">
-          <div class="tab active">Summary</div><div class="tab">P&L</div><div class="tab">Balance Sheet</div><div class="tab">Cash Flow</div>
-          <div class="tab">KPIs</div><div class="tab">Charts</div><div class="tab">QoE Adj.</div><div class="tab">Raw Data</div>
-        </div>
-        <div class="work-grid">
-          <div class="drop">
-            <div class="drop-ico">⇧</div>
-            <strong>Upload inputs for Excel</strong>
-            <span>PDF / XLSX / CSV</span>
-            <button class="select-btn" onclick="document.getElementById('fileInput').click()">Select Files</button>
-          </div>
-          <div>
-            <h3 style="margin-bottom:10px">Actions</h3>
-            <p style="color:var(--muted);font-size:14px;margin-bottom:14px">Génère ou télécharge le dernier modèle Excel.</p>
-            <div class="action-stack">
-              <button class="big-action" onclick="generateExcel()">Generate Excel Model</button>
-              <button class="outline-action" onclick="downloadLatest('excel')">Download Latest Excel</button>
-            </div>
-            <div style="color:var(--muted);font-size:13px;margin-top:18px" id="excelMeta">No model generated yet.</div>
-          </div>
-          <div>
-            <h3 style="margin-bottom:10px">Recent Activity</h3>
-            <ul class="activity" id="activityListExcel"></ul>
-          </div>
-        </div>
+    <div id="bp" class="module">
+      <section class="panel"><div class="panel-head"><div><h2>BP Wizard — Institutional 12-Step Setup</h2><p>Plus le client remplit, plus l'output Excel/PPT devient banque d'affaires.</p></div><button class="small" onclick="loadDefaultIntake()">Load Defaults</button></div>
+        <div class="formgrid" id="bpForm"></div><br>
+        <div class="top-actions"><button class="primary" onclick="saveIntake()">Save Intake</button><button class="dark" onclick="generateBP()">Generate BP Excel</button><button class="mutedbtn" onclick="downloadOutput('bp_model')">Download BP</button></div>
       </section>
     </div>
 
-    <div id="deck" class="module">
-      <section class="panel">
-        <div class="panel-head">
-          <div class="panel-title"><div class="kpi-ico bg-purple">▣</div><div><h2>IM Deck Generator</h2><p>Génération automatique de slides IM selon les données disponibles et les templates chargés.</p></div></div>
-        </div>
-        <div class="two-col">
-          <div>
-            <table class="table">
-              <tr><th>Slide Family</th><th>Trigger</th><th>Status</th></tr>
-              <tr><td>Investment Highlights</td><td>Revenue, EBITDA, market position</td><td>Ready</td></tr>
-              <tr><td>Customer Portfolio</td><td>Customers, contracts, volume</td><td>Ready</td></tr>
-              <tr><td>Financial Overview</td><td>P&L, KPIs, margin, growth</td><td>Ready</td></tr>
-              <tr><td>Value Creation</td><td>Forecast, EBITDA bridge, cash</td><td>Ready</td></tr>
-            </table>
-          </div>
-          <div>
-            <div class="action-stack">
-              <button class="big-action" onclick="generateDeck()">Generate IM Deck</button>
-              <button class="outline-action" onclick="downloadLatest('deck')">Download Latest Deck</button>
-              <button class="outline-action" onclick="openModule('upload')">Upload More Documents</button>
-            </div>
-            <div style="color:var(--muted);font-size:13px;margin-top:18px" id="deckMeta">No deck generated yet.</div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <div id="qoe" class="module">
-      <section class="panel">
-        <div class="panel-title"><div class="kpi-ico bg-green">↗</div><div><h2>QoE Analysis</h2><p>Normalised EBITDA, one-offs, cash conversion, working capital and debt-like items.</p></div></div>
-        <div class="two-col" style="margin-top:18px">
-          <div class="panel" style="margin:0"><h3>QoE Checks</h3><table class="table"><tr><th>Check</th><th>Status</th></tr><tr><td>Revenue recognition</td><td>Pending upload</td></tr><tr><td>One-off costs</td><td>Pending upload</td></tr><tr><td>Working capital seasonality</td><td>Pending upload</td></tr></table></div>
-          <div class="action-stack"><button class="big-action" onclick="runQoe()">Run QoE Analysis</button><button class="outline-action" onclick="toast('QoE memo generation will use the extracted financial pack.')">Generate QoE Memo</button></div>
-        </div>
-      </section>
-    </div>
-
-    <div id="restructuring" class="module">
-      <section class="panel">
-        <div class="panel-title"><div class="kpi-ico bg-orange">⌬</div><div><h2>Restructuring Toolkit</h2><p>Liquidity runway, net debt bridge, covenants, ICR/DSCR and downside scenarios.</p></div></div>
-        <div class="kpi-grid" style="margin-top:18px">
-          <div class="kpi"><div class="kpi-label">Liquidity runway</div><div class="kpi-value">18m</div><div class="kpi-change green">Base case</div></div>
-          <div class="kpi"><div class="kpi-label">Net Debt</div><div class="kpi-value">€201m</div><div class="kpi-change red">4.9x EBITDA</div></div>
-          <div class="kpi"><div class="kpi-label">ICR</div><div class="kpi-value">3.0x</div><div class="kpi-change green">Above threshold</div></div>
-          <div class="kpi"><div class="kpi-label">DSCR</div><div class="kpi-value">1.4x</div><div class="kpi-change green">Compliant</div></div>
-        </div>
-      </section>
-    </div>
-
-    <div id="investors" class="module">
-      <section class="panel">
-        <div class="panel-title"><div class="kpi-ico bg-blue">◫</div><div><h2>Investors Report</h2><p>LP / lender-ready monthly reporting pack.</p></div></div>
-        <div class="action-stack" style="margin-top:18px;max-width:420px"><button class="big-action" onclick="toast('Investor report module ready.')">Generate Investor Report</button></div>
-      </section>
-    </div>
-
-    <div id="settings" class="module">
-      <section class="panel">
-        <div class="panel-title"><div class="kpi-ico bg-blue">⚙</div><div><h2>Settings</h2><p>Licence, templates, endpoints Railway et dernière génération.</p></div></div>
-        <table class="table" style="margin-top:18px">
-          <tr><th>Setting</th><th>Value</th></tr>
-          <tr><td>License</td><td id="settingsLicense">Not connected</td></tr>
-          <tr><td>Excel endpoint</td><td>/api/generate</td></tr>
-          <tr><td>Deck endpoint</td><td>/api/generate_deck</td></tr>
-          <tr><td>Import endpoint</td><td>/api/import</td></tr>
-        </table>
-      </section>
-    </div>
+    <div id="deck" class="module"><section class="panel"><h2>IM Deck Generator</h2><p>Creates institutional PPT: cover, contents, exec summary, highlights, revenue build, operations, financials, value creation, QoE focus, risks and process.</p><br><button class="primary" onclick="generateDeck()">Generate IM Deck</button> <button class="mutedbtn" onclick="downloadOutput('im_deck')">Download Deck</button></section></div>
+    <div id="qoe" class="module"><section class="panel"><h2>QoE Analysis</h2><p>Detailed QoE Excel pack: revenue quality, EBITDA bridge, NWC, debt-like items and open questions.</p><br><button class="primary" onclick="generateQoE()">Generate QoE Pack</button> <button class="mutedbtn" onclick="downloadOutput('qoe_pack')">Download QoE</button></section></div>
+    <div id="restructuring" class="module"><section class="panel"><h2>Restructuring Pack</h2><p>Liquidity, debt stack, covenants, stakeholder options and downside framework.</p><br><button class="primary" onclick="generateRestructuring()">Generate Restructuring Pack</button> <button class="mutedbtn" onclick="downloadOutput('restructuring_pack')">Download Pack</button></section></div>
+    <div id="settings" class="module"><section class="panel"><h2>Settings</h2><table class="table"><tr><th>Item</th><th>Value</th></tr><tr><td>License</td><td id="licenseDisplay"></td></tr><tr><td>Current project</td><td id="projectDisplay">None</td></tr><tr><td>Version</td><td>Institutional V5</td></tr></table></section></div>
   </main>
 </section>
 
@@ -375,185 +112,31 @@ button{cursor:pointer;border:none}
 <div id="toast" class="toast"></div>
 
 <script>
-const validKeys=["JRC-MATEO-2025","JRC-JAUFRE-2025","JRC-OZAN-2025","JRC-DEV-LOCAL","MG-ACCESS-2025","BP-ELITE-2025","JRC-XXXX-XXXX"];
-const state={license:null,files:[],extracted:null,lastExcel:null,lastDeck:null,activities:[]};
-
-const today=new Date();
-document.getElementById("today").innerText=today.toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric"});
-document.getElementById("sideDate").innerText=today.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
-
-function toast(msg,type="info"){
-  const el=document.getElementById("toast");
-  el.innerText=msg;
-  el.style.background=type==="error"?"#991B1B":type==="success"?"#065F46":"#061A3A";
-  el.classList.add("show");
-  setTimeout(()=>el.classList.remove("show"),4200);
-}
-
-const licenseInput=document.getElementById("licenseInput");
-setTimeout(()=>licenseInput.focus(),250);
-licenseInput.addEventListener("input",e=>e.target.value=e.target.value.toUpperCase());
-
-document.getElementById("accessBtn").onclick=async()=>{
-  const key=licenseInput.value
-    .trim()
-    .toUpperCase()
-    .replace(/[–—−]/g, "-")
-    .replace(/\s+/g, "");
-
-  const isValid = validKeys.includes(key) || key.startsWith("JRC-");
-
-  if(!isValid){
-    document.getElementById("loginStatus").style.color="#DC2626";
-    document.getElementById("loginStatus").innerText="Invalid license key";
-    return;
-  }
-  state.license=key;
-  document.getElementById("settingsLicense").innerText=key;
-  try{
-    await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({license_key:key})});
-  }catch(e){}
-  document.getElementById("login").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-  toast("Access granted. Welcome to the Investment Banking Suite.","success");
-};
-
-function openModule(id){
-  document.querySelectorAll(".module").forEach(m=>m.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
-  document.querySelector(`[data-module="${id}"]`)?.classList.add("active");
-  const titles={dashboard:"Dashboard",upload:"Upload Financials",excel:"Elite Excel Model",deck:"IM Deck Generator",qoe:"QoE Analysis",restructuring:"Restructuring",investors:"Investors Report",settings:"Settings"};
-  document.getElementById("pageTitle").innerText=titles[id]||"Dashboard";
-}
+const state={license:null,projects:[],project:null,files:[],wizard:null,defaults:null};
+document.getElementById("today").innerText=new Date().toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric"});
+function toast(msg,type="info"){const el=document.getElementById("toast");el.innerText=msg;el.style.background=type==="error"?"#991B1B":type==="success"?"#065F46":"#061A3A";el.classList.add("show");setTimeout(()=>el.classList.remove("show"),4200)}
+function normKey(){return document.getElementById("licenseInput").value.trim().toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"")}
+async function login(){const key=normKey();if(!key.startsWith("JRC-")&&!["MG-ACCESS-2025","BP-ELITE-2025"].includes(key)){document.getElementById("loginStatus").style.color="#DC2626";document.getElementById("loginStatus").innerText="Invalid license key";return}state.license=key;document.getElementById("licenseDisplay").innerText=key;try{await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({license_key:key})})}catch(e){}document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");toast("Access granted","success");await loadWizard();await refreshProjects()}
+function openModule(id){document.querySelectorAll(".module").forEach(m=>m.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));document.querySelector(`[data-module="${id}"]`)?.classList.add("active");const titles={dashboard:"Dashboard",projects:"Projects",upload:"Data Room",bp:"BP Wizard",deck:"IM Deck",qoe:"QoE",restructuring:"Restructuring",settings:"Settings"};document.getElementById("pageTitle").innerText=titles[id]||"Dashboard"}
 document.querySelectorAll(".nav button").forEach(btn=>btn.onclick=()=>openModule(btn.dataset.module));
-
-function addActivity(title,tag){
-  const time=new Date().toLocaleString("fr-FR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
-  state.activities.unshift({title,time,tag});
-  state.activities=state.activities.slice(0,6);
-  renderActivities();
-}
-function renderActivities(){
-  const html=state.activities.map(a=>`<li><span class="check">✓</span><div class="act-text"><strong>${a.title}</strong><span>${a.time}</span></div><span class="file-tag">${a.tag}</span></li>`).join("");
-  document.getElementById("activityList").innerHTML=html||`<li><span class="check">✓</span><div class="act-text"><strong>Platform ready</strong><span>Awaiting documents</span></div><span class="file-tag">LIVE</span></li>`;
-  document.getElementById("activityListExcel").innerHTML=document.getElementById("activityList").innerHTML;
-}
-renderActivities();
-
-const fileInput=document.getElementById("fileInput");
-fileInput.addEventListener("change",()=>{
-  state.files=[...fileInput.files];
-  if(state.files.length){
-    toast(`${state.files.length} file(s) selected. Extraction can start.`,"success");
-    addActivity(`${state.files.length} financial file(s) selected`,"UPLOAD");
-    openModule("upload");
-  }
-});
-
-["dashboardDrop","uploadDrop"].forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el) return;
-  ["dragenter","dragover"].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();el.classList.add("drag")}));
-  ["dragleave","drop"].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();el.classList.remove("drag")}));
-  el.addEventListener("drop",e=>{
-    state.files=[...e.dataTransfer.files];
-    fileInput.files=e.dataTransfer.files;
-    toast(`${state.files.length} file(s) added.`,"success");
-    addActivity(`${state.files.length} financial file(s) added`,"UPLOAD");
-    openModule("upload");
-  });
-});
-
-async function uploadSelectedFiles(){
-  if(!state.license){toast("Please login first.","error");return}
-  if(!state.files.length){toast("Please select PDF or Excel files first.","error");return}
-  const progress=document.getElementById("uploadProgress");
-  progress.style.width="20%";
-  toast("Extraction started...");
-  let results=[];
-  for(const file of state.files){
-    const fd=new FormData();
-    fd.append("license_key",state.license);
-    fd.append("file",file);
-    try{
-      progress.style.width="45%";
-      const res=await fetch("/api/import",{method:"POST",body:fd});
-      if(!res.ok) throw new Error(await res.text());
-      const data=await res.json();
-      results.push({file:file.name,data});
-      state.extracted=data;
-      addActivity(`Financials extracted from ${file.name}`,file.name.split(".").pop().toUpperCase());
-    }catch(e){
-      console.error(e);
-      addActivity(`Local upload received: ${file.name}`,file.name.split(".").pop().toUpperCase());
-      toast("Backend extraction not available yet, but file is staged in the interface.","error");
-    }
-  }
-  progress.style.width="100%";
-  toast("Extraction workflow completed.","success");
-}
-
-function defaultConfig(){
-  return {
-    company:{name:"Target Company",currency:"EUR",sector:"Business Services"},
-    revenue:{base_revenue:202000000,start_year:2026,projection_years:5,volume_growth:0.073},
-    costs:{gross_margin:0.391,ebitda_margin:0.229},
-    nwc:{dso:55,dio:40,dpo:55},
-    capex:{maintenance:11500000,expansion:0,useful_life:15},
-    debt:{tranches:[{name:"Senior Debt",type:"Term Loan",amount:201000000,rate:7.5,tenor:5}]},
-    tax:{rate:0.25}
-  };
-}
-
-async function generateExcel(){
-  if(!state.license){toast("Please login first.","error");return}
-  toast("Generating Excel model...");
-  try{
-    const payload={license_key:state.license,config:defaultConfig()};
-    const res=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-    if(!res.ok) throw new Error(await res.text());
-    const data=await res.json();
-    state.lastExcel=data.file_id;
-    document.getElementById("excelMeta").innerText=`Last generated: ${data.filename}`;
-    addActivity("Excel model generated","XLSX");
-    toast("Excel model generated. Download starts now.","success");
-    window.location.href=`/api/download/${data.file_id}`;
-  }catch(e){
-    console.error(e);
-    toast("Excel backend not ready or returned an error. Check Railway logs.","error");
-  }
-}
-
-async function generateDeck(){
-  if(!state.license){toast("Please login first.","error");return}
-  toast("Generating IM deck...");
-  try{
-    const payload={license_key:state.license,config:defaultConfig(),extracted_payload:state.extracted||{}};
-    const res=await fetch("/api/generate_deck",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-    if(!res.ok) throw new Error(await res.text());
-    const data=await res.json();
-    state.lastDeck=data.file_id;
-    document.getElementById("deckMeta").innerText=`Last generated: ${data.filename}`;
-    addActivity("IM deck generated","PPTX");
-    toast("IM deck generated. Download starts now.","success");
-    window.location.href=`/api/download_deck/${data.file_id}`;
-  }catch(e){
-    console.error(e);
-    toast("Deck backend not ready or returned an error. Check Railway logs.","error");
-  }
-}
-
-function downloadLatest(type){
-  if(type==="excel" && state.lastExcel){window.location.href=`/api/download/${state.lastExcel}`;return}
-  if(type==="deck" && state.lastDeck){window.location.href=`/api/download_deck/${state.lastDeck}`;return}
-  toast(`No latest ${type} file found yet. Generate one first.`,"error");
-}
-
-function runQoe(){
-  toast("QoE analysis module launched. Upload financials first for full analysis.","success");
-  addActivity("QoE analysis completed","QOE");
-}
+async function loadWizard(){const res=await fetch("/api/wizards");const data=await res.json();state.wizard=data.bp_sections;state.defaults=data.default_intake;renderBPForm(state.defaults)}
+function fieldType(k){if(["investment_thesis","value_creation_plan","key_risks","diligence_questions"].includes(k))return"textarea";return"input"}
+function label(k){return k.replaceAll("_"," ").replace(/\b\w/g,c=>c.toUpperCase())}
+function renderBPForm(values={}){const container=document.getElementById("bpForm");let html="";const fields=["company_name","sector","currency","deal_type","revenue","revenue_growth","contracted_revenue_pct","volume_growth","price_growth","churn","gross_margin","raw_material_pct_sales","direct_labor_pct_sales","freight_pct_sales","energy_pct_sales","ebitda_margin","sgna_pct_sales","fixed_costs","variable_opex_pct_sales","cash","debt","interest_rate","tax_rate","dso","dio","dpo","maintenance_capex","growth_capex","opening_ppe","useful_life","capacity","utilisation","fte","investment_thesis","value_creation_plan","key_risks","diligence_questions"]; fields.forEach((f,i)=>{ if([0,5,10,15,20,24,27,31,34].includes(i)) html+=`<div class="section-title">${i<5?"Company":i<10?"Revenue":i<15?"Gross Margin":i<20?"Opex / EBITDA":i<24?"Debt / Tax":"Operations / Thesis"}</div>`; const val=values[f]??""; if(fieldType(f)==="textarea") html+=`<div class="field" style="grid-column:1/-1"><label>${label(f)}</label><textarea id="bp_${f}">${val||""}</textarea></div>`; else html+=`<div class="field"><label>${label(f)}</label><input id="bp_${f}" value="${val}"></div>`;}); container.innerHTML=html}
+function collectIntake(){const fields=["company_name","sector","currency","deal_type","revenue","revenue_growth","contracted_revenue_pct","volume_growth","price_growth","churn","gross_margin","raw_material_pct_sales","direct_labor_pct_sales","freight_pct_sales","energy_pct_sales","ebitda_margin","sgna_pct_sales","fixed_costs","variable_opex_pct_sales","cash","debt","interest_rate","tax_rate","dso","dio","dpo","maintenance_capex","growth_capex","opening_ppe","useful_life","capacity","utilisation","fte","investment_thesis","value_creation_plan","key_risks","diligence_questions"];const obj={};fields.forEach(f=>{const el=document.getElementById("bp_"+f);if(el)obj[f]=el.value});return obj}
+function loadDefaultIntake(){renderBPForm(state.project?.intake||state.defaults||{});toast("Defaults loaded","success")}
+async function refreshProjects(){if(!state.license)return;const res=await fetch(`/api/projects?license_key=${encodeURIComponent(state.license)}`);const data=await res.json();state.projects=data.projects||[];document.getElementById("kpiProjects").innerText=state.projects.length;document.getElementById("kpiDocs").innerText=state.projects.reduce((a,p)=>a+(p.documents?.length||0),0);document.getElementById("kpiOutputs").innerText=state.projects.reduce((a,p)=>a+Object.keys(p.outputs||{}).length,0);renderProjects()}
+function renderProjects(){const el=document.getElementById("projectList");el.innerHTML=(state.projects||[]).map(p=>`<div class="project-row ${state.project&&state.project.project_id===p.project_id?'active':''}"><div><strong>${p.name}</strong><br><span style="color:#64748B;font-size:13px">${p.company_name} • ${p.sector} • ${p.currency}</span></div><button class="small" onclick="selectProject('${p.project_id}')">Open</button></div>`).join("")||"<p>No projects yet.</p>"}
+async function createProject(){const payload={license_key:state.license,name:document.getElementById("pName").value||"New Investment Project",company_name:document.getElementById("pCompany").value||"Target Company",sector:document.getElementById("pSector").value||"General",currency:document.getElementById("pCurrency").value,deal_type:document.getElementById("pDealType").value};const res=await fetch("/api/projects",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const data=await res.json();state.project=data.project;toast("Project created","success");await refreshProjects();selectProject(state.project.project_id);openModule("upload")}
+async function selectProject(id){const res=await fetch(`/api/projects/${id}?license_key=${encodeURIComponent(state.license)}`);const data=await res.json();state.project=data.project;document.getElementById("currentProjectSide").innerText=state.project.company_name;document.getElementById("projectDisplay").innerText=state.project.company_name;renderProjects();renderBPForm(state.project.intake||state.defaults||{});toast(`Project selected: ${state.project.company_name}`,"success")}
+document.getElementById("fileInput").addEventListener("change",e=>{state.files=[...e.target.files];document.getElementById("uploadStatus").innerText=`${state.files.length} file(s) selected`;toast(`${state.files.length} file(s) selected`,"success")});
+const dz=document.getElementById("dropZone");["dragenter","dragover"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add("drag")}));["dragleave","drop"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove("drag")}));dz.addEventListener("drop",e=>{state.files=[...e.dataTransfer.files];document.getElementById("uploadStatus").innerText=`${state.files.length} file(s) selected`;toast(`${state.files.length} file(s) added`,"success")});
+async function uploadFiles(){if(!state.project){toast("Create/select a project first","error");return}if(!state.files.length){toast("Select files first","error");return}for(const file of state.files){const fd=new FormData();fd.append("license_key",state.license);fd.append("category","financials");fd.append("file",file);const res=await fetch(`/api/projects/${state.project.project_id}/upload`,{method:"POST",body:fd});if(!res.ok){toast("Upload failed, check logs","error");return}document.getElementById("uploadStatus").innerText=`Uploaded: ${file.name}`}toast("Upload completed","success");refreshProjects()}
+async function saveIntake(){if(!state.project){toast("Select project first","error");return}const res=await fetch(`/api/projects/${state.project.project_id}/intake`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({license_key:state.license,project_id:state.project.project_id,intake:collectIntake()})});const data=await res.json();state.project=data.project;toast("Institutional intake saved","success")}
+async function postGen(route,type){if(!state.project){toast("Select project first","error");return}await saveIntake();toast("Generation started...");const res=await fetch(`/api/projects/${state.project.project_id}/${route}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({license_key:state.license,project_id:state.project.project_id,intake:collectIntake()})});if(!res.ok){toast(await res.text(),"error");return}const data=await res.json();state.project=data.project;toast("Generated. Download starting.","success");window.location.href=`/api/projects/${state.project.project_id}/download/${type}?license_key=${encodeURIComponent(state.license)}`}
+function generateBP(){return postGen("generate-bp","bp_model")}function generateDeck(){return postGen("generate-deck","im_deck")}function generateQoE(){return postGen("generate-qoe","qoe_pack")}function generateRestructuring(){return postGen("generate-restructuring","restructuring_pack")}
+async function generateAll(){await generateBP();setTimeout(generateQoE,1200);setTimeout(generateRestructuring,2400);setTimeout(generateDeck,3600)}
+function downloadOutput(type){if(!state.project){toast("Select project first","error");return}window.location.href=`/api/projects/${state.project.project_id}/download/${type}?license_key=${encodeURIComponent(state.license)}`}
 </script>
 </body>
 </html>
