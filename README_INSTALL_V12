@@ -1,0 +1,75 @@
+MG ADVISORY INSTITUTIONAL DEBT ENGINE V12
+
+But:
+Créer un vrai moteur dette institutionnel paramétrable dans le BP Excel.
+
+Fichiers à ajouter/remplacer à la racine GitHub:
+1. institutional_debt_engine_v12.py          -> NOUVEAU
+2. institutional_formula_model_builder_v12.py -> NOUVEAU
+3. server.py                                 -> REMPLACER
+
+À garder:
+- historical_accounts_engine.py
+- extraction_core.py
+- claude_client.py
+- ai_financial_extractor.py
+- index.html actuel
+
+Ce que V12 ajoute:
+- 60+ types de dettes / financements
+- configuration jusqu'à 60 tranches
+- listes déroulantes Excel
+- formules Excel partout
+- RCF / revolver
+- borrowing base AR / inventory
+- senior debt / TLA / TLB
+- unitranche
+- second lien
+- mezzanine cash / PIK / toggle
+- shareholder loan
+- seller note / vendor loan
+- bridge / DIP / rescue financing
+- factoring / securitisation / ABL
+- leases / IFRS16
+- bonds / notes
+- preferred equity / convertible
+- project finance / debt sculpting
+- tax / social security / supplier plans
+- cash sweep / repayment waterfall
+- fees / OID / exit fees / commitment fees
+- covenants: ND/EBITDA, senior leverage, ICR, DSCR, FCCR, liquidity
+- debt checks
+
+Sheets créées dans l'Excel:
+- Debt Lists
+- Debt Config
+- Debt Draws
+- Borrowing Base
+- Debt Schedule
+- Debt Fees
+- Debt Waterfall
+- Debt Covenants
+- Debt Outputs
+- Debt Checks
+
+Ordre GitHub:
+1. Upload institutional_debt_engine_v12.py
+2. Upload institutional_formula_model_builder_v12.py
+3. Replace server.py
+4. Commit
+5. Railway -> Clear Build Cache
+6. Redeploy
+
+Test:
+1. Ouvre /health
+2. Vérifie:
+   version = 12.0
+   institutional_debt_engine_v12 = true
+   debt_types > 60
+3. Ouvre /api/debt/library
+4. Génère un BP
+5. L'Excel doit contenir toutes les feuilles Debt V12
+
+Important:
+Le paramétrage exact des tranches se fait dans l'onglet Excel "Debt Config".
+C'est volontaire: pour un modèle banque d'affaires, le debt stack doit rester auditable et modifiable directement dans Excel.
